@@ -2,7 +2,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 
 import { PrismaClient } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import type { ConfigService } from 'src/config/config.service';
+import { ConfigService } from 'src/config/config.service';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {

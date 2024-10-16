@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { ConfigService, type GlobalConfig } from './config.service';
-import { readConfig, type Config } from './schema';
+import { readConfig } from './schema';
 import {
     error,
     getError,
@@ -10,7 +10,7 @@ import {
     success,
     type ErrorOr,
 } from 'src/common/error';
-import { getEnvironmentConfig, type EnvironmentConfig } from './environment';
+import { getEnvironmentConfig } from './environment';
 
 @Module({
     providers: [ConfigService],
@@ -42,7 +42,9 @@ export class ConfigModule {
             config,
         };
 
-        ConfigModule._configService = new ConfigService(globalConfig);
+        ConfigModule._configService = new ConfigService();
+
+        ConfigService.setup(globalConfig);
 
         return success<GlobalConfig>(globalConfig);
     }

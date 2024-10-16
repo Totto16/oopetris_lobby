@@ -28,7 +28,7 @@ import { SignInDto } from './dto/sign-in';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from '../prisma/prisma.service';
-import type { ConfigService } from 'src/config/config.service';
+import { ConfigService } from 'src/config/config.service';
 import type { AuthenticatedRequest } from 'src/auth/auth.guard';
 import type { JWTResponse } from '@shared/user';
 @ApiTags('user')

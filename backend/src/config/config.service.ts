@@ -14,19 +14,15 @@ export class ConfigService {
 
     private static _instance: ConfigService;
 
-    constructor(config?: GlobalConfig) {
+    constructor() {
         if (ConfigService._instance) {
             return ConfigService._instance;
         }
         ConfigService._instance = this;
+    }
 
-        if (!config) {
-            throw new Error(
-                'Global Instance of the ConfigService needs a config as parameter to its constructor',
-            );
-        }
-
-        this._config = config;
+    static setup(config: GlobalConfig) {
+        ConfigService._instance._config = config;
     }
 
     get config(): GlobalConfig {

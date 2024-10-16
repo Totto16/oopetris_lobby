@@ -10,8 +10,8 @@ import { JWTContent } from './auth.service';
 import { IS_PUBLIC_KEY } from '@decorators/all';
 import { Reflector } from '@nestjs/core';
 import type { UserBase } from '@shared/user';
-import type { ConfigService } from 'src/config/config.service';
-import type { UserService } from 'src/user/user.service';
+import { ConfigService } from 'src/config/config.service';
+import { UserService } from 'src/user/user.service';
 
 export type ResolvedUser = JWTContent & { user: UserBase };
 
