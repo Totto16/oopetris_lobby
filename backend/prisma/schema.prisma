@@ -6,28 +6,38 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  relationMode = "foreignKeys"
 }
 
+// TODO: test if all relations are correct
+
 model User {
-  id          String        @id @default(uuid())
-  username    String        @unique
-  password    String
-  Lobby       Lobby[]
-  LobbyPlayer LobbyPlayer[]
+  id       String   @id @default(uuid())
+  username String   @unique
+  password String
+  role     UserRole @default(User)
+
+  //
+  LobbyPlayer LobbyPlayer? @ignore
+  Lobby       Lobby[]      @ignore
+
+  @@index([id, username])
+  @@map("users")
 }
 
 model LobbyPlayer {
-  id Int @id @default(autoincrement())
-
-  player_id String
+  player_id String @unique
   player    User   @relation(fields: [player_id], references: [id])
+
+  is_ready Boolean
 
   lobby_id String
   lobby    Lobby  @relation(fields: [lobby_id], references: [id])
 
-  is_ready Boolean
+  @@id([player_id, lobby_id])
+  @@map("lobby_player")
 }
 
 model Lobby {
@@ -39,4 +49,20 @@ model Lobby {
   timestamp       DateTime
   players         LobbyPlayer[]
   gameserver_port Int?
+  lobby_status    LobbyStatus
+
+  @@index([id])
+  @@map("lobbies")
+}
+
+enum UserRole {
+  User
+  Admin
+}
+
+enum LobbyStatus {
+  Open
+  Closed
+  Running
+  Finished
 }
