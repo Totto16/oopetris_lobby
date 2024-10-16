@@ -21,6 +21,9 @@
     "paths": {
       "@decorators/all": [
         "src/decorators/index.ts"
+      ],
+      "@shared/user": [
+        "src/shared/user/index.ts"
       ]
     }
   }
