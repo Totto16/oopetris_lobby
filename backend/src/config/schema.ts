@@ -1,13 +1,20 @@
 import { z } from 'zod';
 import { readFile } from 'node:fs/promises';
 import fs from 'node:fs';
-import { error, success, type ErrorOr } from 'src/common/types';
+import { error, success, type ErrorOr } from 'src/common/error';
 
 export const configSchema = z
     .object({
         jwt_secret: z.string(),
         gameserver_executable: z.string(),
         simulator_library_path: z.string(),
+        database_settings: z
+            .object({
+                initialize_lazy: z.boolean().optional().default(true),
+            })
+            .strict()
+            .optional()
+            .default({}),
     })
     .strict();
 

@@ -1,0 +1,39 @@
+import { Injectable, OnModuleInit } from '@nestjs/common';
+
+import { PrismaClient } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import type { ConfigService } from 'src/config/config.service';
+
+@Injectable()
+export class PrismaService extends PrismaClient implements OnModuleInit {
+    constructor(private readonly configService: ConfigService) {
+        super({
+            datasources: {
+                db: { url: configService.config.environment.database_url },
+            },
+        });
+    }
+
+    async onModuleInit(): Promise<void> {
+        if (
+            !this.configService.config.config.database_settings.initialize_lazy
+        ) {
+            await this.$connect();
+        }
+    }
+
+    async getHealthStatus() {
+        //TODO
+        return true;
+    }
+
+    static getErrorMessage(error: PrismaClientKnownRequestError): string {
+        switch (error.code) {
+            case 'P2002': {
+                return `There is a unique constraint violation: field '${(error.meta?.target as string | undefined) ?? 'unknown'}' has to be unique`;
+            }
+            default:
+                return `Unknown error ${error.code} on field '${(error.meta?.target as string | undefined) ?? 'unknown'}'`;
+        }
+    }
+}
