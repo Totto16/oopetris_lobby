@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { readFile } from 'node:fs/promises';
-import fs from 'node:fs';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import { error, success, type ErrorOr } from 'src/common/error';
 
 export const configSchema = z
@@ -20,14 +21,31 @@ export const configSchema = z
 
 export type Config = z.infer<typeof configSchema>;
 
+// from: https://github.com/colinhacks/zod/discussions/2215#discussioncomment-5356286
+const stringToJSONSchema = z
+    .string()
+    .transform((str, ctx): z.infer<ReturnType<any>> => {
+        try {
+            return JSON.parse(str);
+        } catch (e) {
+            ctx.addIssue({ code: 'custom', message: 'Invalid JSON' });
+            return z.NEVER;
+        }
+    });
+
 export async function readConfig(filePath: string): Promise<ErrorOr<Config>> {
-    if (fs.existsSync(filePath)) {
-        return error('File does not exist');
+    if (!fs.existsSync(filePath)) {
+        return error(`File does not exist`);
     }
 
-    const data = await readFile(filePath);
+    const data = (await readFile(filePath)).toString();
 
-    const result = await configSchema.safeParseAsync(data);
+    const json = await stringToJSONSchema.safeParseAsync(data);
+    if (!json.success) {
+        return error(`Parse error: ${json.error}`);
+    }
+
+    const result = await configSchema.safeParseAsync(json.data);
 
     if (!result.success) {
         return error(`Parse error: ${result.error}`);

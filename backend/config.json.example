@@ -1,0 +1,5 @@
+{
+    "jwt_secret": "<YOUR SECRET HERE>",
+    "simulator_library_path":"<Your simulator Library path here>",
+    "gameserver_executable":"<Your gameserver Executable path here>"
+}

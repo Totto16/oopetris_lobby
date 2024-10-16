@@ -20,10 +20,10 @@
     "resolveJsonModule": true,
     "paths": {
       "@decorators/all": [
-        "src/decorators/index.ts"
+        "src/decorators"
       ],
       "@shared/user": [
-        "src/shared/user/index.ts"
+        "src/shared/user"
       ]
     }
   }
