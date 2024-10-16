@@ -23,9 +23,10 @@ async function bootstrap(): Promise<void> {
         process.exit(1);
     }
 
-    const config = getResult(parsedConfig);
+    const {
+        environment: { env_type, port },
+    } = getResult(parsedConfig);
 
-    const env_type = config.environment.env_type;
     if (env_type === 'prod') {
         loggerSettings = ['error'];
     }
@@ -57,8 +58,6 @@ async function bootstrap(): Promise<void> {
 
     app.get<AppService>(AppService).subscribeToShutdown(() => app.close());
 
-    // can be specified using environment variables in e.g. docker
-    const port = process.env.PORT ?? 3000;
     await app.listen(port);
 
     if (env_type === 'prod') {
