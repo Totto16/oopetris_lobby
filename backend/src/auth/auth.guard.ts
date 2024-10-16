@@ -9,17 +9,22 @@ import { Request } from 'express';
 import { JWTContent } from './auth.service';
 import { IS_PUBLIC_KEY } from '@decorators/all';
 import { Reflector } from '@nestjs/core';
+import type { UserBase } from '@shared/user';
+import type { ConfigService } from 'src/config/config.service';
+import type { UserService } from 'src/user/user.service';
+
+export type ResolvedUser = JWTContent & { user: UserBase };
 
 export type AuthenticationProperties = {
-    user: JWTContent;
+    user: ResolvedUser;
     authenticated?: boolean;
 };
 
 export type AuthenticatedRequest = Request & AuthenticationProperties;
 
 // A proxy that catches "casts" to AuthenticatedRequest AND don't check for the authenticated flag!, that aren't valid
-const errorProxy: JWTContent = new Proxy<JWTContent>(
-    { sub: '', username: '' },
+const errorProxy: ResolvedUser = new Proxy<ResolvedUser>(
+    { id: '', username: '', user: {} as UserBase },
     {
         get(_target, prop): never {
             throw new UnauthorizedException(
@@ -33,7 +38,9 @@ const errorProxy: JWTContent = new Proxy<JWTContent>(
 export class AuthGuard implements CanActivate {
     constructor(
         private readonly jwtService: JwtService,
+        private readonly configService: ConfigService,
         private readonly reflector: Reflector,
+        private readonly userService: UserService,
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -61,17 +68,27 @@ export class AuthGuard implements CanActivate {
             const payload: JWTContent = await this.jwtService.verifyAsync(
                 token,
                 {
-                    secret: jwtConstants.secret,
+                    secret: this.configService.config.config.jwt_secret,
                 },
             );
+
+            const user = await this.userService.findOne(payload.id);
+
+            if (!user) {
+                throw new UnauthorizedException(
+                    `User could not be found: id ${payload.id}`,
+                );
+            }
+            const result = { ...payload, user };
+
             // I assign the payload to the request object here
             // so that I can access it in our route handlers
-            request['user'] = payload;
+            request['user'] = result;
             request['authenticated'] = true;
+            return true;
         } catch {
             throw new UnauthorizedException('Unknown authorization error');
         }
-        return true;
     }
 
     private extractTokenFromHeader(request: Request): string | undefined {

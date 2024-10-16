@@ -9,7 +9,7 @@ import { User } from './entities/user.entity';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
-export class UsersService {
+export class UserService {
     constructor(private readonly prisma: PrismaService) {}
 
     async signUp(

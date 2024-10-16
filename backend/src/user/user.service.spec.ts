@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersService } from './users.service';
+import { UserService } from './user.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthService } from '../auth/auth.service';
 import { User } from './entities/user.entity';
@@ -11,16 +11,16 @@ import { jwtImport } from '../helpers';
 const PASSWORD = 'Test13%';
 const USERNAME = 'test3';
 
-describe('UsersService', () => {
-    let service: UsersService;
+describe('UserService', () => {
+    let service: UserService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             imports: [jwtImport],
-            providers: [AuthService, UsersService, PrismaService],
+            providers: [AuthService, UserService, PrismaService],
         }).compile();
 
-        service = module.get<UsersService>(UsersService);
+        service = module.get<UserService>(UserService);
     });
 
     afterAll(async () => {

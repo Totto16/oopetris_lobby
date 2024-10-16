@@ -24,7 +24,7 @@ model User {
   Lobby       Lobby[]      @ignore
 
   @@index([id, username])
-  @@map("users")
+  @@map("user")
 }
 
 model LobbyPlayer {
@@ -52,7 +52,7 @@ model Lobby {
   lobby_status    LobbyStatus
 
   @@index([id])
-  @@map("lobbies")
+  @@map("lobby")
 }
 
 enum UserRole {

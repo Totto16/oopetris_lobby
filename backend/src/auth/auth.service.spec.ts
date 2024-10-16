@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
-import { UsersService } from '../users/users.service';
+import { UserService } from '../user/user.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { UnauthorizedException } from '@nestjs/common';
 import { jwtImport, sleep, waitUntilDoesNotThrow } from '../helpers';
@@ -32,10 +32,10 @@ describe('AuthService', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             imports: [jwtImport],
-            providers: [AuthService, UsersService, PrismaService],
+            providers: [AuthService, UserService, PrismaService],
         }).compile();
 
-        const userService = module.get<UsersService>(UsersService);
+        const userService = module.get<UserService>(UserService);
         await waitForClear(module);
         await waitUntilDoesNotThrow(async () => {
             const temp = await userService.signUp({ username: USERNAME, password: PASSWORD, passwordConfirm: PASSWORD });

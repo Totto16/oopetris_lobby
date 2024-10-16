@@ -11,7 +11,7 @@ import {
     HttpCode,
     Req,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { SignUpDto } from './dto/sign-up';
 import { AdminOnly, Public } from '@decorators/all';
@@ -31,11 +31,11 @@ import { PrismaService } from '../prisma/prisma.service';
 import type { ConfigService } from 'src/config/config.service';
 import type { AuthenticatedRequest } from 'src/auth/auth.guard';
 import type { JWTResponse } from '@shared/user';
-@ApiTags('users')
-@Controller('users')
-export class UsersController {
+@ApiTags('user')
+@Controller('user')
+export class UserController {
     constructor(
-        private readonly usersService: UsersService,
+        private readonly userService: UserService,
         private readonly authService: AuthService,
         private readonly jwtService: JwtService,
         private readonly configService: ConfigService,
@@ -66,7 +66,7 @@ export class UsersController {
             secret: this.configService.config.config.jwt_secret,
         });
 
-        return this.usersService.findOne(payload.id);
+        return this.userService.findOne(payload.id);
     }
 
     @Public()
@@ -96,7 +96,7 @@ export class UsersController {
     })
     @HttpCode(HttpStatus.CREATED)
     async signUp(@Body() signUpDto: SignUpDto): Promise<User> {
-        const temp = await this.usersService.signUp(signUpDto);
+        const temp = await this.userService.signUp(signUpDto);
         if (temp instanceof PrismaClientKnownRequestError) {
             throw new HttpException(
                 `couldn't create user: ${PrismaService.getErrorMessage(temp)}`,
@@ -111,7 +111,7 @@ export class UsersController {
     @Get('all')
     @HttpCode(HttpStatus.OK)
     async findAll(): Promise<User[] | null> {
-        return this.usersService.findAll();
+        return this.userService.findAll();
     }
 
     @ApiBearerAuth()
@@ -119,7 +119,7 @@ export class UsersController {
     @Get('find/:id')
     @HttpCode(HttpStatus.OK)
     async findOne(@Param('id') id: string): Promise<User | null> {
-        return this.usersService.findOne(id);
+        return this.userService.findOne(id);
     }
 
     @ApiBearerAuth()
@@ -129,7 +129,7 @@ export class UsersController {
     async findOneByUsername(
         @Param('username') username: string,
     ): Promise<User | null> {
-        return this.usersService.findOneByUsername(username);
+        return this.userService.findOneByUsername(username);
     }
 
     @ApiBearerAuth()
@@ -139,7 +139,7 @@ export class UsersController {
         @Req() req: AuthenticatedRequest,
         @Body() updateUserDto: UpdateUserDto,
     ): Promise<User | null> {
-        return this.usersService.update(req.user.id, updateUserDto);
+        return this.userService.update(req.user.id, updateUserDto);
     }
 
     @ApiBearerAuth()
@@ -150,14 +150,14 @@ export class UsersController {
         @Param('id') id: string,
         @Body() updateUserDto: UpdateUserDto,
     ): Promise<User | null> {
-        return this.usersService.update(id, updateUserDto);
+        return this.userService.update(id, updateUserDto);
     }
 
     @ApiBearerAuth()
     @Delete('')
     @HttpCode(HttpStatus.OK)
     async delete(@Req() req: AuthenticatedRequest): Promise<User | null> {
-        return this.usersService.delete(req.user.id);
+        return this.userService.delete(req.user.id);
     }
 
     @ApiBearerAuth()
@@ -165,6 +165,6 @@ export class UsersController {
     @Delete(':id')
     @HttpCode(HttpStatus.OK)
     async deleteOther(@Param('id') id: string): Promise<User | null> {
-        return this.usersService.delete(id);
+        return this.userService.delete(id);
     }
 }

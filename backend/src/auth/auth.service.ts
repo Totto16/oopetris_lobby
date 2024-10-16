@@ -1,9 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
+import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcrypt';
-import { SignInDto } from '../users/dto/sign-in';
-import { JWTResponse } from '@todo-app/data-access';
+import { SignInDto } from '../user/dto/sign-in';
+import type { JWTResponse } from '@shared/user';
 export interface JWTContent {
     id: string;
     username: string;
@@ -12,12 +12,12 @@ export interface JWTContent {
 @Injectable()
 export class AuthService {
     constructor(
-        private readonly usersService: UsersService,
+        private readonly userService: UserService,
         private readonly jwtService: JwtService,
     ) {}
 
     async signIn(signInDto: SignInDto): Promise<JWTResponse> {
-        const user = await this.usersService.findOneByUsername(
+        const user = await this.userService.findOneByUsername(
             signInDto.username,
         );
         if (user === undefined || user === null) {

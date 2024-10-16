@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthService } from '../auth/auth.service';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
@@ -13,8 +13,8 @@ import type { JWTResponse } from '@shared/user';
 const USERNAME = 'testController4';
 const PASSWORD = 'f67F86n9gf97oidvl%%';
 
-describe('UsersController', () => {
-    let controller: UsersController;
+describe('UserController', () => {
+    let controller: UserController;
 
     let app: INestApplication;
 
@@ -22,7 +22,7 @@ describe('UsersController', () => {
         let userToken: string | null = null;
         while (userToken === null) {
             const res = await supertest(app.getHttpServer())
-                .post('/users/login')
+                .post('/user/login')
                 .send({
                     username: USERNAME,
                     password: password ?? PASSWORD,
@@ -41,11 +41,11 @@ describe('UsersController', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             imports: [jwtImport],
-            controllers: [UsersController],
-            providers: [UsersService, PrismaService, AuthService],
+            controllers: [UserController],
+            providers: [UserService, PrismaService, AuthService],
         }).compile();
 
-        controller = module.get<UsersController>(UsersController);
+        controller = module.get<UserController>(UserController);
 
         app = module.createNestApplication();
         app.useGlobalPipes(new ValidationPipe());
@@ -69,7 +69,7 @@ describe('UsersController', () => {
         describe('and using valid data', () => {
             it('should return the correct error', () => {
                 return supertest(app.getHttpServer())
-                    .post('/users/create')
+                    .post('/user/create')
                     .send({
                         haha: 'xD',
                     })
@@ -99,7 +99,7 @@ describe('UsersController', () => {
         describe('and using invalid data', () => {
             it('should return the correct error', () => {
                 return supertest(app.getHttpServer())
-                    .post('/users/create')
+                    .post('/user/create')
                     .send({
                         username: '1',
                         password: 'UOBPTgn)/01',
@@ -119,7 +119,7 @@ describe('UsersController', () => {
         describe('and using valid data', () => {
             it('should return the correct error', () => {
                 return supertest(app.getHttpServer())
-                    .post('/users/create')
+                    .post('/user/create')
                     .send({
                         username:
                             '1svdfsvyffffffffffffffffffftertgfvcBZFNUKSDJHSFJSJFV',
@@ -138,7 +138,7 @@ describe('UsersController', () => {
 
             it('should return the correct error', () => {
                 return supertest(app.getHttpServer())
-                    .post('/users/create')
+                    .post('/user/create')
                     .send({
                         username: 'test123',
                         password: '1',
@@ -157,7 +157,7 @@ describe('UsersController', () => {
             });
             it('should return the correct error', () => {
                 return supertest(app.getHttpServer())
-                    .post('/users/create')
+                    .post('/user/create')
                     .send({
                         username: 'test123',
                         password:
@@ -177,7 +177,7 @@ describe('UsersController', () => {
             });
             it('should return the correct error', () => {
                 return supertest(app.getHttpServer())
-                    .post('/users/create')
+                    .post('/user/create')
                     .send({
                         username: 'test123',
                         password: 'dffdfwqfas',
@@ -192,7 +192,7 @@ describe('UsersController', () => {
             });
             it('should return the correct error', () => {
                 return supertest(app.getHttpServer())
-                    .post('/users/create')
+                    .post('/user/create')
                     .send({
                         username: 'test123',
                         password: 'f67F86n9gf97oidvl%%',
@@ -213,7 +213,7 @@ describe('UsersController', () => {
         describe('and using valid data', () => {
             it('should succeed', () => {
                 return supertest(app.getHttpServer())
-                    .post('/users/create')
+                    .post('/user/create')
                     .send({
                         username: USERNAME,
                         password: PASSWORD,
@@ -241,7 +241,7 @@ describe('UsersController', () => {
                 await getToken();
 
                 return supertest(app.getHttpServer())
-                    .post('/users/create')
+                    .post('/user/create')
                     .send({
                         username: USERNAME,
                         password: 'sguvkjfvSDGSD%%',
@@ -259,7 +259,7 @@ describe('UsersController', () => {
                 const token = await getToken();
 
                 return supertest(app.getHttpServer())
-                    .post('/users/token')
+                    .post('/user/token')
                     .send({
                         token,
                     })
@@ -281,18 +281,18 @@ describe('UsersController', () => {
                     });
             });
 
-            it('should get all users', async () => {
+            it('should get all user', async () => {
                 const token = await getToken();
 
                 return supertest(app.getHttpServer())
-                    .get('/users/all')
+                    .get('/user/all')
                     .set('Authorization', `Bearer ${token}`)
                     .send()
                     .expect(HttpStatus.OK)
                     .then(async (response) => {
-                        const users: User[] = response.body as User[];
-                        expect(users).toBeInstanceOf(Array);
-                        for (const user of users) {
+                        const user: User[] = response.body as User[];
+                        expect(user).toBeInstanceOf(Array);
+                        for (const user of user) {
                             await expect(validate(user)).resolves.toStrictEqual(
                                 [],
                             );
@@ -309,7 +309,7 @@ describe('UsersController', () => {
                 const token = await getToken();
 
                 return supertest(app.getHttpServer())
-                    .get(`/users/find/${new ObjectId().toString()}`)
+                    .get(`/user/find/${new ObjectId().toString()}`)
                     .set('Authorization', `Bearer ${token}`)
                     .send()
                     .expect(HttpStatus.OK)
@@ -323,14 +323,14 @@ describe('UsersController', () => {
 
                 const user: User = (
                     await supertest(app.getHttpServer())
-                        .post('/users/token')
+                        .post('/user/token')
                         .send({
                             token,
                         })
                 ).body as User;
 
                 return supertest(app.getHttpServer())
-                    .get(`/users/find/${user.id}`)
+                    .get(`/user/find/${user.id}`)
                     .set('Authorization', `Bearer ${token}`)
                     .send()
                     .expect(HttpStatus.OK)
@@ -346,7 +346,7 @@ describe('UsersController', () => {
             const token = await getToken();
 
             const user: User = (
-                await supertest(app.getHttpServer()).post('/users/token').send({
+                await supertest(app.getHttpServer()).post('/user/token').send({
                     token,
                 })
             ).body as User;
@@ -354,7 +354,7 @@ describe('UsersController', () => {
             user.role = UserRole.Admin;
 
             return supertest(app.getHttpServer())
-                .patch(`/users/${user.id}`)
+                .patch(`/user/${user.id}`)
                 .set('Authorization', `Bearer ${token}`)
                 .send({ role: user.role })
                 .expect(HttpStatus.OK)
@@ -366,11 +366,11 @@ describe('UsersController', () => {
                 });
         });
 
-        it('should be able to edit the users password', async () => {
+        it('should be able to edit the user password', async () => {
             const token = await getToken();
 
             const user: User = (
-                await supertest(app.getHttpServer()).post('/users/token').send({
+                await supertest(app.getHttpServer()).post('/user/token').send({
                     token,
                 })
             ).body as User;
@@ -378,7 +378,7 @@ describe('UsersController', () => {
             user.role = UserRole.Admin;
 
             return supertest(app.getHttpServer())
-                .patch(`/users/${user.id}`)
+                .patch(`/user/${user.id}`)
                 .set('Authorization', `Bearer ${token}`)
                 .send({ role: user.role, password: PASSWORD + 's' })
                 .expect(HttpStatus.OK)
@@ -400,7 +400,7 @@ describe('UsersController', () => {
             const token = await getToken(PASSWORD + 's');
 
             return supertest(app.getHttpServer())
-                .delete(`/users/${new ObjectId().toString()}`)
+                .delete(`/user/${new ObjectId().toString()}`)
                 .set('Authorization', `Bearer ${token}`)
                 .send()
                 .expect(HttpStatus.OK)
@@ -412,13 +412,13 @@ describe('UsersController', () => {
         it('should be able to delete the user', async () => {
             const token = await getToken(PASSWORD + 's');
             const user: User = (
-                await supertest(app.getHttpServer()).post('/users/token').send({
+                await supertest(app.getHttpServer()).post('/user/token').send({
                     token,
                 })
             ).body as User;
 
             return supertest(app.getHttpServer())
-                .delete(`/users/${user.id}`)
+                .delete(`/user/${user.id}`)
                 .set('Authorization', `Bearer ${token}`)
                 .send()
                 .expect(HttpStatus.OK)
@@ -428,7 +428,7 @@ describe('UsersController', () => {
                     expect(user).toStrictEqual(user2);
 
                     const res = await supertest(app.getHttpServer())
-                        .post('/users/token')
+                        .post('/user/token')
                         .send({
                             token,
                         });

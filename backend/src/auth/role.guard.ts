@@ -7,6 +7,8 @@ import {
 import { Reflector } from '@nestjs/core';
 import type { AuthenticatedRequest } from './auth.guard';
 import { ROLES_KEY } from '@decorators/all';
+import { UserRole } from '@shared/user';
+import type { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class RoleGuard implements CanActivate {
@@ -21,16 +23,21 @@ export class RoleGuard implements CanActivate {
             throw new UnauthorizedException('Not authorized');
         }
 
-        const roles: Role[] = this.reflector.getAllAndOverride<Role[]>(
+        const roles: UserRole[] = this.reflector.getAllAndOverride<UserRole[]>(
             ROLES_KEY,
             [context.getHandler(), context.getClass()],
         );
-        if (roles.includes(request.user.role)) {
-            return true;
-        }
 
-        throw new UnauthorizedException(
-            `Not allowed for role '${request.user.role}'`,
-        );
+        try {
+            if (roles.includes(request.user.user.role)) {
+                return true;
+            }
+
+            throw new UnauthorizedException(
+                `Not allowed for role '${request.user.user.role}'`,
+            );
+        } catch {
+            throw new UnauthorizedException('Unknown authorization error');
+        }
     }
 }
