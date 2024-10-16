@@ -17,6 +17,7 @@ async function bootstrap(): Promise<void> {
     const parsedConfig = await ConfigModule.setup();
 
     if (isError(parsedConfig)) {
+        // the logger isn't initialized yet
         console.error(
             `Error while initializing the config: ${getError(parsedConfig)}!`,
         );
@@ -61,6 +62,7 @@ async function bootstrap(): Promise<void> {
     await app.listen(port);
 
     if (env_type === 'prod') {
+        // the loglevel log / info isn't outputted, so force this text, by using console
         console.log(
             `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`,
         );

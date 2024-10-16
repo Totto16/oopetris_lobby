@@ -1,4 +1,4 @@
-import { Injectable, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { Subject } from 'rxjs';
 
 @Injectable()
@@ -6,8 +6,7 @@ export class AppService implements OnModuleDestroy {
     private shutdownListener$: Subject<void> = new Subject();
 
     onModuleDestroy(): void {
-        //TODO: never log to console
-        console.log('Executing OnDestroy Hook');
+        Logger.log('Executing OnDestroy Hook');
     }
 
     subscribeToShutdown(shutdownFn: () => void | Promise<void>): void {
