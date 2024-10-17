@@ -36,7 +36,13 @@ COPY prisma/ /app/prisma/
 RUN corepack enable && \
     corepack install -g pnpm@9.12.2 && \ 
     pnpm install -P --no-lockfile && \
-    rm -rf /tmp/*
+    rm -rf /tmp/* && \
+    corepack cache clean && \
+    rm -rf /root/.cache/ && \
+    npm uninstall -g yarn pnpm && \
+    rm -rf /root/.npm && \
+    rm -rf /root/.local
+
 
 ENV PORT=3000
 ENV CONFIG_PATH=/app/config.json
