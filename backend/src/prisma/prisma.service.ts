@@ -1,4 +1,4 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit, UseFilters } from '@nestjs/common';
 
 import { PrismaClient } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
@@ -15,17 +15,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     }
 
     async onModuleInit(): Promise<void> {
-        if (
-            !this.configService.config.config.database_settings.initialize_lazy
-        ) {
-            try {
-                await this.$connect();
-            } catch (err) {
-                //TODO: use error interceptors
-                Logger.error('Failed to connect to database', err);
-                throw new Error('Exiting');
-            }
-        }
+        await this.$connect();
     }
 
     async getHealthStatus() {

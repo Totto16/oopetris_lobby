@@ -59,7 +59,13 @@ async function bootstrap(): Promise<void> {
 
     app.get<AppService>(AppService).subscribeToShutdown(() => app.close());
 
-    await app.listen(port);
+    try {
+        await app.listen(port);
+    } catch (err) {
+        Logger.error(err);
+        app.close()
+        return;
+    }
 
     if (env_type === 'prod') {
         // the loglevel log / info isn't outputted, so force this text, by using console

@@ -8,14 +8,7 @@ export const configSchema = z
     .object({
         jwt_secret: z.string(),
         gameserver_executable: z.string(),
-        simulator_library_path: z.string(),
-        database_settings: z
-            .object({
-                initialize_lazy: z.boolean().optional().default(true),
-            })
-            .strict()
-            .optional()
-            .default({}),
+        simulator_library_path: z.string()
     })
     .strict();
 
