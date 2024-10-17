@@ -17,4 +17,5 @@ import { ConfigModule } from 'src/config/config.module';
     providers: [AppService, ...globalProviders],
     controllers: [AppController, AppControllerV1, AppControllerV2],
 })
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class AppModule {}

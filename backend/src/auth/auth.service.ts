@@ -13,6 +13,7 @@ interface JWTContentV2 {
 export type JWTContent = JwtPayload | JWTContentV2;
 
 function isV2JWTPayload(payload: JWTContent): payload is JWTContentV2 {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     return (payload as any).id !== undefined;
 }
 
@@ -35,6 +36,7 @@ export class AuthService {
         const user = await this.userService.findOneByUsername(
             signInDto.username,
         );
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (user === undefined || user === null) {
             throw new UnauthorizedException('User not found');
         }
@@ -55,6 +57,7 @@ export class AuthService {
         const user = await this.userService.findOneByUsername(
             signInDto.username,
         );
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (user === undefined || user === null) {
             throw new UnauthorizedException('User not found');
         }

@@ -8,4 +8,5 @@ import { globalProviders } from '../helpers';
     providers: [...globalProviders],
     exports: [AuthService],
 })
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class AuthModule {}

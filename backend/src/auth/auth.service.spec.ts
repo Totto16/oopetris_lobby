@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { UnauthorizedException } from '@nestjs/common';
-import { jwtImport, sleep, waitUntilDoesNotThrow } from '../helpers';
+import { sleep, waitUntilDoesNotThrow } from '../test/hepers';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 const PASSWORD = 'Test123$';
 const USERNAME = 'test2';
@@ -20,6 +20,7 @@ describe('AuthService', () => {
                 where: { username: USERNAME },
                 select: { username: true },
             });
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (temp === null || temp === undefined) {
                 user = null;
                 continue;
@@ -34,7 +35,6 @@ describe('AuthService', () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            imports: [jwtImport],
             providers: [AuthService, UserService, PrismaService],
         }).compile();
 
