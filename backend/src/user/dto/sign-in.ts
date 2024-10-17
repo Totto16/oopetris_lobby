@@ -11,7 +11,7 @@ export class SignInDto implements UserSignInBase {
     @MinLength(userConstants.username.min)
     @MaxLength(userConstants.username.max)
     @IsDefined()
-    username: string;
+    username!: string;
 
     @ApiProperty({
         minimum: userConstants.password.min,
@@ -21,5 +21,5 @@ export class SignInDto implements UserSignInBase {
     @MinLength(userConstants.password.min)
     @MaxLength(userConstants.password.max)
     @IsDefined()
-    password: string;
+    password!: string;
 }

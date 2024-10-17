@@ -12,12 +12,17 @@
     "baseUrl": "./",
     "incremental": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "strictNullChecks": true,
     "noImplicitAny": true,
     "strictBindCallApply": true,
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true,
+    "strict": true,
+    "strictBuiltinIteratorReturn": true,
+    "strictFunctionTypes": true,
+    "alwaysStrict": true,
+    "strictPropertyInitialization": true,
     "paths": {
       "@decorators/all": [
         "src/decorators"

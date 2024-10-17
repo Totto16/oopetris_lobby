@@ -18,7 +18,7 @@ export class SignUpDto implements UserSignUpBase {
     @MinLength(userConstants.username.min)
     @MaxLength(userConstants.username.max)
     @IsDefined()
-    username: string;
+    username!: string;
 
     @ApiProperty({
         minimum: userConstants.password.min,
@@ -31,7 +31,7 @@ export class SignUpDto implements UserSignUpBase {
         message: 'password too weak',
     })
     @IsDefined()
-    password: string;
+    password!: string;
 
     @ApiProperty({
         minimum: userConstants.password.min,
@@ -42,5 +42,5 @@ export class SignUpDto implements UserSignUpBase {
     @MaxLength(userConstants.password.max)
     @Match('password', { secret: true })
     @IsDefined()
-    passwordConfirm: string;
+    passwordConfirm!: string;
 }

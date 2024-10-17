@@ -8,14 +8,18 @@ import {
     ValidateIf,
 } from 'class-validator';
 import { UserRole, UserSignUpBase, userConstants } from '@shared/user';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import {
     IsNotBcryptEncrypted,
     Match,
     ValidateIfDefined,
 } from '@decorators/all';
+import { SignUpDto } from './sign-up';
 
-export class UpdateUserDto implements Partial<UserSignUpBase> {
+export class UpdateUserDto
+    extends PartialType(SignUpDto)
+    implements Partial<UserSignUpBase>
+{
     @ApiProperty({
         required: false,
         minimum: userConstants.username.min,
