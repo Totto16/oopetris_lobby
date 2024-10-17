@@ -1,0 +1,41 @@
+name: "oopetris-lobby"
+services:
+  db:
+    container_name: db
+    image: postgres:17
+    restart: unless-stopped
+    shm_size: 128mb
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=oopetris_lobby
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    volumes:
+      - "./database:/var/lib/postgresql/data/"
+    networks:
+      main:
+        aliases:
+          - db
+
+  backend:
+    container_name: backend
+    build:
+      context: ./backend/
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64/v8"
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql://postgres:${DATABASE_PASSWORD}@db:5432/oopetris_lobby
+    volumes:
+      - ./config.json:/app/config.json
+    networks:
+      main:
+        aliases:
+          - backend
+
+networks:
+  main:
