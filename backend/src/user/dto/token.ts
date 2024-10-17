@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
-import type { JWTResponse } from "@shared/user";
-import { IsString } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import type { JWTResponse } from '@shared/user';
+import { IsString } from 'class-validator';
 
 export class JWTResponseDTO implements JWTResponse {
     @ApiProperty({

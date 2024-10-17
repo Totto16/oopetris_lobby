@@ -16,7 +16,10 @@ describe('AuthService', () => {
 
         let user: true | null = true;
         while (user !== null) {
-            const temp = await prismaService.user.findUnique({ where: { username: USERNAME }, select: { username: true } });
+            const temp = await prismaService.user.findUnique({
+                where: { username: USERNAME },
+                select: { username: true },
+            });
             if (temp === null || temp === undefined) {
                 user = null;
                 continue;
@@ -38,9 +41,15 @@ describe('AuthService', () => {
         const userService = module.get<UserService>(UserService);
         await waitForClear(module);
         await waitUntilDoesNotThrow(async () => {
-            const temp = await userService.signUp({ username: USERNAME, password: PASSWORD, passwordConfirm: PASSWORD });
+            const temp = await userService.signUp({
+                username: USERNAME,
+                password: PASSWORD,
+                passwordConfirm: PASSWORD,
+            });
             if (temp instanceof PrismaClientKnownRequestError) {
-                throw new Error(`Test setup gone wrong: ${PrismaService.getErrorMessage(temp)}`);
+                throw new Error(
+                    `Test setup gone wrong: ${PrismaService.getErrorMessage(temp)}`,
+                );
             }
         });
 
@@ -61,14 +70,20 @@ describe('AuthService', () => {
     });
 
     it('should be able to sign in', async () => {
-        await expect(service.signIn({ username: USERNAME, password: PASSWORD })).resolves.toHaveProperty('access_token');
+        await expect(
+            service.signIn({ username: USERNAME, password: PASSWORD }),
+        ).resolves.toHaveProperty('access_token');
     });
 
     it('should reject invalid password', async () => {
-        await expect(service.signIn({ username: USERNAME, password: 'afasfsaf' })).rejects.toStrictEqual(new UnauthorizedException('Wrong password'));
+        await expect(
+            service.signIn({ username: USERNAME, password: 'afasfsaf' }),
+        ).rejects.toStrictEqual(new UnauthorizedException('Wrong password'));
     });
 
     it('should reject invalid user', async () => {
-        await expect(service.signIn({ username: 'dasfawf', password: 's' })).rejects.toStrictEqual(new UnauthorizedException('User not found'));
+        await expect(
+            service.signIn({ username: 'dasfawf', password: 's' }),
+        ).rejects.toStrictEqual(new UnauthorizedException('User not found'));
     });
 });

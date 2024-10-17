@@ -40,13 +40,17 @@ describe('UserService', () => {
         let user: User;
         await expect(
             (async (): Promise<User> => {
-                const temp = await service.signUp({ username: USERNAME, password: PASSWORD, passwordConfirm: PASSWORD });
+                const temp = await service.signUp({
+                    username: USERNAME,
+                    password: PASSWORD,
+                    passwordConfirm: PASSWORD,
+                });
                 if (temp instanceof Error) {
                     throw new Error(`'Unexpected error: ${temp.message}`);
                 }
                 user = temp;
                 return user;
-            })()
+            })(),
         ).resolves.toBeInstanceOf(Object);
 
         expect(user).not.toBeNull();
