@@ -5,10 +5,14 @@ import { PrismaService } from '../prisma/prisma.service';
 import { AuthService } from '../auth/auth.service';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import supertest from 'supertest';
-import { validate } from 'class-validator';
+import { isUUID, validate } from 'class-validator';
 import { User } from './entities/user.entity';
 import { compareSync } from 'bcrypt';
 import type { JWTResponse } from '@shared/user';
+import { Server } from 'net';
+import { sleep } from 'src/test/hepers';
+import { UserRole } from '@shared/user';
+import { randomUUID } from 'crypto';
 
 const USERNAME = 'testController4';
 const PASSWORD = 'f67F86n9gf97oidvl%%';
@@ -16,7 +20,7 @@ const PASSWORD = 'f67F86n9gf97oidvl%%';
 describe('UserController', () => {
     let controller: UserController;
 
-    let app: INestApplication;
+    let app: INestApplication<Server>;
 
     async function getToken(password?: string): Promise<string> {
         let userToken: string | null = null;
@@ -40,7 +44,6 @@ describe('UserController', () => {
     }
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            imports: [jwtImport],
             controllers: [UserController],
             providers: [UserService, PrismaService, AuthService],
         }).compile();
@@ -228,7 +231,7 @@ describe('UserController', () => {
                         expect(user).not.toBeNull();
                         expect(user).not.toBeUndefined();
 
-                        expect(ObjectId.isValid(user.id)).toStrictEqual(true);
+                        expect(isUUID(user.id, '4')).toStrictEqual(true);
                         expect(user.username).toStrictEqual(USERNAME);
                         expect(
                             compareSync(PASSWORD, user.password),
@@ -272,7 +275,7 @@ describe('UserController', () => {
                         expect(user).not.toBeNull();
                         expect(user).not.toBeUndefined();
 
-                        expect(ObjectId.isValid(user.id)).toStrictEqual(true);
+                        expect(isUUID(user.id, '4')).toStrictEqual(true);
                         expect(user.username).toStrictEqual(USERNAME);
                         expect(
                             compareSync(PASSWORD, user.password),
@@ -290,17 +293,15 @@ describe('UserController', () => {
                     .send()
                     .expect(HttpStatus.OK)
                     .then(async (response) => {
-                        const user: User[] = response.body as User[];
-                        expect(user).toBeInstanceOf(Array);
-                        for (const user of user) {
+                        const users: User[] = response.body as User[];
+                        expect(users).toBeInstanceOf(Array);
+                        for (const user of users) {
                             await expect(validate(user)).resolves.toStrictEqual(
                                 [],
                             );
                             expect(user).not.toBeNull();
                             expect(user).not.toBeUndefined();
-                            expect(ObjectId.isValid(user.id)).toStrictEqual(
-                                true,
-                            );
+                            expect(isUUID(user.id, '4')).toStrictEqual(true);
                         }
                     });
             });
@@ -309,7 +310,7 @@ describe('UserController', () => {
                 const token = await getToken();
 
                 return supertest(app.getHttpServer())
-                    .get(`/user/find/${new ObjectId().toString()}`)
+                    .get(`/user/find/${randomUUID()}`)
                     .set('Authorization', `Bearer ${token}`)
                     .send()
                     .expect(HttpStatus.OK)
@@ -400,7 +401,7 @@ describe('UserController', () => {
             const token = await getToken(PASSWORD + 's');
 
             return supertest(app.getHttpServer())
-                .delete(`/user/${new ObjectId().toString()}`)
+                .delete(`/user/${randomUUID()}`)
                 .set('Authorization', `Bearer ${token}`)
                 .send()
                 .expect(HttpStatus.OK)
