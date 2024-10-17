@@ -1,6 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
-import { LogLevel, Logger, ValidationPipe } from '@nestjs/common';
+import {
+    LogLevel,
+    Logger,
+    ValidationPipe,
+    VersioningType,
+} from '@nestjs/common';
 import {
     SwaggerModule,
     DocumentBuilder,
@@ -33,9 +38,17 @@ async function bootstrap(): Promise<void> {
     }
 
     const app = await NestFactory.create(AppModule, { logger: loggerSettings });
+
     const globalPrefix = 'api';
+
     app.setGlobalPrefix(globalPrefix);
     app.useGlobalPipes(new ValidationPipe());
+
+    // see: https://docs.nestjs.com/techniques/versioning
+    app.enableVersioning({
+        type: VersioningType.URI,
+        defaultVersion: '1',
+    });
 
     if (env_type === 'dev') {
         const config = new DocumentBuilder()
@@ -63,7 +76,7 @@ async function bootstrap(): Promise<void> {
         await app.listen(port);
     } catch (err) {
         Logger.error(err);
-        app.close()
+        app.close();
         return;
     }
 

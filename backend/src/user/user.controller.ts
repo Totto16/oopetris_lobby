@@ -32,7 +32,7 @@ import { ConfigService } from 'src/config/config.service';
 import type { AuthenticatedRequest } from 'src/auth/auth.guard';
 import type { JWTResponse } from '@shared/user';
 @ApiTags('user')
-@Controller('user')
+@Controller({ version: '2', path: 'user' })
 export class UserController {
     constructor(
         private readonly userService: UserService,

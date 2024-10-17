@@ -1,4 +1,11 @@
-import { Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Post,
+    VERSION_NEUTRAL,
+} from '@nestjs/common';
 
 import { AppService, HealthCheck } from './app.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -6,7 +13,7 @@ import { AdminOnly, Public } from '@decorators/all';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiTags('general')
-@Controller()
+@Controller({ version: VERSION_NEUTRAL })
 export class AppController {
     constructor(private readonly appService: AppService) {}
 
