@@ -23,14 +23,16 @@ import {
 } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { ValidatorErrorDto } from './dto/error';
-import { AuthService, JWTContent } from '../auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 import { SignInDto } from './dto/sign-in';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from 'src/config/config.service';
 import type { AuthenticatedRequest } from 'src/auth/auth.guard';
-import type { JWTResponse } from '@shared/user';
+import { type JWTResponse } from '@shared/user';
+import { JWTResponseDTO } from './dto/token';
+
 @ApiTags('user')
 @Controller({ version: '2', path: 'user' })
 export class UserController {
@@ -41,21 +43,21 @@ export class UserController {
         private readonly configService: ConfigService,
     ) {}
 
-    @Public()
     @ApiResponse({
         status: HttpStatus.OK,
-        description: 'The token was correct and the user was returned.',
-        schema: { nullable: true, type: getSchemaPath(User) },
+        description:
+            'The credentials were correct and a user token was returned.',
+        type: JWTResponseDTO,
     })
     @ApiResponse({
         status: HttpStatus.UNAUTHORIZED,
-        description: 'The token was incorrect',
+        description: 'The credentials were incorrect',
         type: ValidatorErrorDto<HttpStatus.UNAUTHORIZED>,
     })
     @ApiResponse({
         status: HttpStatus.BAD_REQUEST,
         description: "The user couldn't be found",
-        type: ValidatorErrorDto<HttpStatus.UNAUTHORIZED>,
+        type: ValidatorErrorDto<HttpStatus.BAD_REQUEST>,
     })
     @Public()
     @HttpCode(HttpStatus.OK)
@@ -64,8 +66,6 @@ export class UserController {
         return this.authService.signIn(signInDto);
     }
 
-    @Public()
-    @Post('create')
     @ApiResponse({
         status: HttpStatus.CREATED,
         description: 'The user has successfully signed up.',
@@ -82,7 +82,9 @@ export class UserController {
         description: 'The username is already present',
         type: ValidatorErrorDto<HttpStatus.UNPROCESSABLE_ENTITY>,
     })
+    @Public()
     @HttpCode(HttpStatus.CREATED)
+    @Post('create')
     async signUp(@Body() signUpDto: SignUpDto): Promise<User> {
         const temp = await this.userService.signUp(signUpDto);
         if (temp instanceof PrismaClientKnownRequestError) {
@@ -96,24 +98,24 @@ export class UserController {
 
     @ApiBearerAuth()
     @AdminOnly()
-    @Get('all')
     @HttpCode(HttpStatus.OK)
+    @Get('all')
     async findAll(): Promise<User[] | null> {
         return this.userService.findAll();
     }
 
     @ApiBearerAuth()
     @AdminOnly()
-    @Get('find/:id')
     @HttpCode(HttpStatus.OK)
+    @Get('find/:id')
     async findOne(@Param('id') id: string): Promise<User | null> {
         return this.userService.findOne(id);
     }
 
     @ApiBearerAuth()
     @AdminOnly()
-    @Get('username/:username')
     @HttpCode(HttpStatus.OK)
+    @Get('username/:username')
     async findOneByUsername(
         @Param('username') username: string,
     ): Promise<User | null> {
@@ -121,8 +123,8 @@ export class UserController {
     }
 
     @ApiBearerAuth()
-    @Patch()
     @HttpCode(HttpStatus.OK)
+    @Patch()
     async update(
         @Req() req: AuthenticatedRequest,
         @Body() updateUserDto: UpdateUserDto,
@@ -132,8 +134,8 @@ export class UserController {
 
     @ApiBearerAuth()
     @AdminOnly()
-    @Patch(':id')
     @HttpCode(HttpStatus.OK)
+    @Patch(':id')
     async updateOther(
         @Param('id') id: string,
         @Body() updateUserDto: UpdateUserDto,
@@ -142,16 +144,16 @@ export class UserController {
     }
 
     @ApiBearerAuth()
-    @Delete('')
     @HttpCode(HttpStatus.OK)
+    @Delete('')
     async delete(@Req() req: AuthenticatedRequest): Promise<User | null> {
         return this.userService.delete(req.user.user.id);
     }
 
     @ApiBearerAuth()
     @AdminOnly()
-    @Delete(':id')
     @HttpCode(HttpStatus.OK)
+    @Delete(':id')
     async deleteOther(@Param('id') id: string): Promise<User | null> {
         return this.userService.delete(id);
     }
