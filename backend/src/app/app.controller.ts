@@ -1,6 +1,6 @@
 import { Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
 
-import { AppService } from './app.service';
+import { AppService, HealthCheck } from './app.service';
 import { ApiTags } from '@nestjs/swagger';
 import { AdminOnly, Public } from '@decorators/all';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -13,7 +13,7 @@ export class AppController {
     @Public()
     @HttpCode(HttpStatus.OK)
     @Get('healthcheck')
-    healthCheck(): { date: Date } {
+    async healthCheck(): Promise<HealthCheck> {
         return this.appService.healthCheck();
     }
 

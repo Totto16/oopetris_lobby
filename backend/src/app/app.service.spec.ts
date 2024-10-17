@@ -14,9 +14,9 @@ describe('AppService', () => {
     });
 
     describe('health check', () => {
-        it('should return a date in the future', () => {
+        it('should return a date in the future', async () => {
             const now = new Date();
-            const result = service.healthCheck();
+            const result = await service.healthCheck();
             expect(now.getTime()).toBeLessThanOrEqual(result.date.getTime());
         });
     });

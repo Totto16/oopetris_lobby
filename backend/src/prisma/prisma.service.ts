@@ -4,6 +4,11 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { ConfigService } from 'src/config/config.service';
 
+export type DbStatus = 'ok' | 'error';
+export interface DbHealth {
+    status: DbStatus;
+}
+
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
     constructor(private readonly configService: ConfigService) {
@@ -18,9 +23,13 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
         await this.$connect();
     }
 
-    async getHealthStatus() {
-        //TODO
-        return true;
+    async getHealthStatus(): Promise<DbHealth> {
+        try {
+            const _result = await this.$queryRaw`SELECT 1`;
+            return { status: 'ok' };
+        } catch (_e) {
+            return { status: 'error' };
+        }
     }
 
     static getErrorMessage(error: PrismaClientKnownRequestError): string {
