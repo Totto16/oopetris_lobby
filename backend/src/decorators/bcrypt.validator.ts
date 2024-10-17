@@ -4,7 +4,7 @@ import {
     ValidatorConstraint,
     ValidatorConstraintInterface,
 } from 'class-validator';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 //from: https://stackoverflow.com/questions/60451337/password-confirmation-in-typescript-with-class-validator
 export function IsNotBcryptEncrypted() {
     return (object: any, propertyName: string): void => {

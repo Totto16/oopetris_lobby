@@ -10,7 +10,7 @@ import { User } from './entities/user.entity';
 import { compareSync } from 'bcrypt';
 import type { JWTResponse } from '@shared/user';
 import { Server } from 'net';
-import { sleep } from '../test/hepers';
+import { sleep } from '../test/helpers';
 import { UserRole } from '@shared/user';
 import { randomUUID } from 'crypto';
 import { ConfigService } from '../config/config.service';
