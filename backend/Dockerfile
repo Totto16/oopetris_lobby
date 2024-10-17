@@ -7,7 +7,7 @@ WORKDIR /tmp
 COPY .npmrc package.json pnpm-lock.yaml nest-cli.json tsconfig.json tsconfig.build.json /tmp/
 
 RUN corepack enable && \
-    corepack install -g pnpm@9.12.1 && \
+    corepack install -g pnpm@9.12.2 && \
     pnpm install --frozen-lockfile
 
 # compile
@@ -30,12 +30,13 @@ ENV NODE_ENV=production
 WORKDIR /app
 
 COPY --from=build-env /tmp/dist/ /app/
-COPY entry.sh /app/
+COPY --chmod=755 entry.sh /app/
+COPY prisma/ /app/prisma/
 
 RUN corepack enable && \
-    corepack install -g pnpm@9.12.1 && \ 
+    corepack install -g pnpm@9.12.2 && \ 
     pnpm install -P --no-lockfile && \
-    rm -rf .corepack
+    rm -rf /tmp/*
 
 ENV PORT=3000
 ENV CONFIG_PATH=/app/config.json

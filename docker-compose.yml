@@ -1,7 +1,7 @@
 name: "oopetris-lobby"
 services:
   db:
-    container_name: db
+    container_name: oopetris-lobby-db
     image: postgres:17
     restart: unless-stopped
     shm_size: 128mb
@@ -19,7 +19,7 @@ services:
           - db
 
   backend:
-    container_name: backend
+    container_name: oopetris-lobby-backend
     build:
       context: ./backend/
       platforms:
@@ -31,11 +31,13 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:${DATABASE_PASSWORD}@db:5432/oopetris_lobby
     volumes:
-      - ./config.json:/app/config.json
+      - ./backend_config.json:/app/config.json
     networks:
       main:
         aliases:
           - backend
+    ports:
+      - 7654:3000
 
 networks:
   main:
