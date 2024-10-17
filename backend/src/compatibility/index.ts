@@ -5,6 +5,8 @@
 
 import { IsString, MaxLength } from 'class-validator';
 
+export const commit = 'b6eb82abe014de3caf7573b32a79eee609326fb0';
+
 export class User {
     @IsString()
     id!: string;

@@ -18,6 +18,7 @@ COPY prisma/ /tmp/prisma/
 COPY src/ /tmp/src/
 
 RUN pnpm run generate:types && \
+    sed -i "s/XXX_HASH_XXX/$(git rev-parse HEAD)/" src/generated/commit.ts && \
     pnpm run build:prod
 
 

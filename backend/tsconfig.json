@@ -29,6 +29,9 @@
       ],
       "@shared/user": [
         "src/shared/user"
+      ],
+      "@shared/genral": [
+        "src/shared/general"
       ]
     }
   }
