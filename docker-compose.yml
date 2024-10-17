@@ -5,6 +5,13 @@ services:
     image: postgres:17
     restart: unless-stopped
     shm_size: 128mb
+    healthcheck:
+      test: pg_isready -d oopetris_lobby -U postgres
+      interval: 5m
+      start_interval: 30s
+      start_period: 5s
+      retries: 3
+
     env_file:
       - .env
     environment:
@@ -25,7 +32,12 @@ services:
       platforms:
         - "linux/amd64"
         - "linux/arm64/v8"
+      args:
+        # TODO: somehow run "git rev-parse HEAD" here
+        - OOPETRIS_LOBBY_COMMIT_HASH=""
     restart: unless-stopped
+    depends_on:
+      - db
     env_file:
       - .env
     environment:
