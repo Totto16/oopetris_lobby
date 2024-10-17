@@ -9,6 +9,7 @@ import bcrypt from 'bcrypt';
 export function IsNotBcryptEncrypted() {
     return (object: any, propertyName: string): void => {
         registerDecorator({
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
             target: object.constructor,
             propertyName,
             constraints: [],
@@ -25,7 +26,7 @@ export class IsNotBcryptEncryptedConstraint
         try {
             bcrypt.getRounds(value);
             return false;
-        } catch (error) {
+        } catch (_error) {
             return true;
         }
     }

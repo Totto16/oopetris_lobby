@@ -14,10 +14,10 @@ describe('AppController', () => {
     });
 
     describe('health check', () => {
-        it('should return a date in the future', () => {
+        it('should return a date in the future', async () => {
             const appController = app.get<AppController>(AppController);
             const now = new Date();
-            const result = appController.healthCheck();
+            const result = await appController.healthCheck();
             expect(now.getTime()).toBeLessThanOrEqual(result.date.getTime());
         });
     });

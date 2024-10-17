@@ -1,10 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../src/app/s/app.module';
+import { AppModule } from '../src/app/app.module';
+import { Server } from 'net';
 
 describe('AppController (e2e)', () => {
-    let app: INestApplication;
+    let app: INestApplication<Server>;
 
     beforeEach(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({

@@ -13,7 +13,7 @@ interface JWTContentV2 {
 export type JWTContent = JwtPayload | JWTContentV2;
 
 function isV2JWTPayload(payload: JWTContent): payload is JWTContentV2 {
-    return (payload as any)['id'] !== undefined;
+    return (payload as any).id !== undefined;
 }
 
 export function getUserId(content: JWTContent): string {

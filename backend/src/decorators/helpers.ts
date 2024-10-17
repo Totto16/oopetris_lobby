@@ -1,4 +1,4 @@
 import { ValidateIf } from 'class-validator';
 
 export const ValidateIfDefined = (): PropertyDecorator =>
-    ValidateIf((object, value) => value !== undefined);
+    ValidateIf((_object, value) => value !== undefined);

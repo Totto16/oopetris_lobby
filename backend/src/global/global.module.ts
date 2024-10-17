@@ -9,7 +9,7 @@ import { ConfigService } from 'src/config/config.service';
         JwtModule.registerAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
-            useFactory: async (configService: ConfigService) => {
+            useFactory: (configService: ConfigService) => {
                 return {
                     secret: configService.config.config.jwt_secret,
                     //TODO: maybe make changeable
@@ -20,4 +20,5 @@ import { ConfigService } from 'src/config/config.service';
     ],
     exports: [JwtModule],
 })
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class GlobalModule {}

@@ -76,21 +76,21 @@ async function bootstrap(): Promise<void> {
         await app.listen(port);
     } catch (err) {
         Logger.error(err);
-        app.close();
+        await app.close();
         return;
     }
 
     if (env_type === 'prod') {
         // the loglevel log / info isn't outputted, so force this text, by using console
         console.log(
-            `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`,
+            `🚀 Application is running on: http://localhost:${port.toString()}/${globalPrefix}`,
         );
     } else {
         Logger.log(
-            `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`,
+            `🚀 Application is running on: http://localhost:${port.toString()}/${globalPrefix}`,
         );
         Logger.log(
-            `🔍 Swagger ui is available at http://localhost:${port}/swagger-ui`,
+            `🔍 Swagger ui is available at http://localhost:${port.toString()}/swagger-ui`,
         );
     }
 }

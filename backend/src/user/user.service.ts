@@ -62,7 +62,7 @@ export class UserService {
     async delete(id: string): Promise<User | null> {
         try {
             return await this.prisma.user.delete({ where: { id } });
-        } catch (e) {
+        } catch (_e) {
             return null;
         }
     }

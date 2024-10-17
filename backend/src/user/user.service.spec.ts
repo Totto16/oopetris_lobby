@@ -3,10 +3,9 @@ import { UserService } from './user.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthService } from '../auth/auth.service';
 import { User } from './entities/user.entity';
-import { ObjectId } from 'bson';
-import { UserRole } from '@todo-app/data-access';
 import { compareSync } from 'bcrypt';
-import { jwtImport } from '../helpers';
+import { isUUID } from 'class-validator';
+import { UserRole } from '@shared/user';
 
 const PASSWORD = 'Test13%';
 const USERNAME = 'test3';
@@ -16,7 +15,6 @@ describe('UserService', () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            imports: [jwtImport],
             providers: [AuthService, UserService, PrismaService],
         }).compile();
 
@@ -37,7 +35,7 @@ describe('UserService', () => {
     });
 
     it('should be able to sign up', async () => {
-        let user: User;
+        let user!: User;
         await expect(
             (async (): Promise<User> => {
                 const temp = await service.signUp({
@@ -56,7 +54,7 @@ describe('UserService', () => {
         expect(user).not.toBeNull();
         expect(user).not.toBeUndefined();
 
-        expect(ObjectId.isValid(user.id)).toStrictEqual(true);
+        expect(isUUID(user.id, '4')).toStrictEqual(true);
         expect(user.username).toStrictEqual(USERNAME);
         expect(compareSync(PASSWORD, user.password)).toStrictEqual(true);
         expect(user.role).toStrictEqual(UserRole.User);

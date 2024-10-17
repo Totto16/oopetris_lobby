@@ -17,11 +17,12 @@ import { getEnvironmentConfig } from './environment';
     controllers: [],
     exports: [ConfigService],
 })
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class ConfigModule {
     private static _configService: ConfigService;
 
     static async setup(): Promise<ErrorOr<GlobalConfig>> {
-        const environmentOrError = await getEnvironmentConfig();
+        const environmentOrError = getEnvironmentConfig();
 
         if (isError(environmentOrError)) {
             return error(`Environment: ${getError(environmentOrError)}`);

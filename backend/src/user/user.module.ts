@@ -13,4 +13,5 @@ import { LegacyUserController } from './legacy.user.controller';
     imports: [ConfigModule, PrismaModule],
     exports: [UserService],
 })
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class UserModule {}

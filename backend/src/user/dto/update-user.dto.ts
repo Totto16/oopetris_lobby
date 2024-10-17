@@ -43,8 +43,8 @@ export class UpdateUserDto
     @IsString()
     @MinLength(userConstants.password.min)
     @MaxLength(userConstants.password.max)
-    @ValidateIf((object) => object['password'] !== undefined)
-    @Match('password', { secret: true })
+    @ValidateIf((object: UpdateUserDto) => object.password !== undefined)
+    @Match<UpdateUserDto, 'password'>('password', { secret: true })
     @IsDefined()
     passwordConfirm?: string;
 

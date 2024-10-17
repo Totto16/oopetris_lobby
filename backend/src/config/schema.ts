@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { readFile } from 'node:fs/promises';
 import * as fs from 'node:fs';
-import * as path from 'node:path';
 import { error, success, type ErrorOr } from 'src/common/error';
 
 export const configSchema = z
@@ -20,7 +19,7 @@ const stringToJSONSchema = z
     .transform((str, ctx): z.infer<ReturnType<any>> => {
         try {
             return JSON.parse(str);
-        } catch (e) {
+        } catch (_e) {
             ctx.addIssue({ code: 'custom', message: 'Invalid JSON' });
             return z.NEVER;
         }
@@ -35,12 +34,14 @@ export async function readConfig(filePath: string): Promise<ErrorOr<Config>> {
 
     const json = await stringToJSONSchema.safeParseAsync(data);
     if (!json.success) {
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         return error(`Parse error: ${json.error}`);
     }
 
     const result = await configSchema.safeParseAsync(json.data);
 
     if (!result.success) {
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         return error(`Parse error: ${result.error}`);
     }
 

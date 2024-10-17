@@ -10,7 +10,7 @@ export interface HealthCheck {
 
 @Injectable()
 export class AppService implements OnModuleDestroy {
-    private shutdownListener$: Subject<void> = new Subject();
+    private shutdownListener$ = new Subject<void>();
 
     constructor(
         private prismaService: PrismaService,

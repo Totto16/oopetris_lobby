@@ -15,10 +15,10 @@ import { UserService } from 'src/user/user.service';
 
 export type ResolvedUser = JWTContent & { user: UserBase };
 
-export type AuthenticationProperties = {
+export interface AuthenticationProperties {
     user: ResolvedUser;
     authenticated?: boolean;
-};
+}
 
 export type AuthenticatedRequest = Request & AuthenticationProperties;
 
@@ -49,8 +49,8 @@ export class AuthGuard implements CanActivate {
             .getRequest();
 
         // for safety
-        request['user'] = errorProxy;
-        request['authenticated'] = false;
+        request.user = errorProxy;
+        request.authenticated = false;
 
         const isPublic: boolean = this.reflector.getAllAndOverride<boolean>(
             IS_PUBLIC_KEY,
@@ -85,8 +85,8 @@ export class AuthGuard implements CanActivate {
 
             // I assign the payload to the request object here
             // so that I can access it in our route handlers
-            request['user'] = result;
-            request['authenticated'] = true;
+            request.user = result;
+            request.authenticated = true;
             return true;
         } catch {
             throw new UnauthorizedException('Unknown authorization error');

@@ -1,4 +1,4 @@
-import { Injectable, OnModuleDestroy } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import type { EnvironmentConfig } from './environment';
 import type { Config } from './schema';
 
@@ -15,6 +15,7 @@ export class ConfigService {
     private static _instance: ConfigService;
 
     constructor() {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (ConfigService._instance) {
             return ConfigService._instance;
         }

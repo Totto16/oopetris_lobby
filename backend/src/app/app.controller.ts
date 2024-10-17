@@ -32,7 +32,7 @@ export class AppController {
     @HttpCode(HttpStatus.NO_CONTENT)
     @Post('shutdown')
     shutdown(): void {
-        return this.appService.shutdown();
+        this.appService.shutdown();
     }
 }
 
@@ -42,7 +42,7 @@ export class AppControllerV1 {
     @Public()
     @HttpCode(HttpStatus.OK)
     @Get('version')
-    async version(): Promise<VersionResponse> {
+    version(): VersionResponse {
         return {
             version: '0.0.1',
             commit: compatibilityCommit,
@@ -57,7 +57,7 @@ export class AppControllerV2 {
     @Public()
     @HttpCode(HttpStatus.OK)
     @Get('version')
-    async version(): Promise<VersionResponse> {
+    version(): VersionResponse {
         return {
             version: currentVersion,
             commit: currentCommit,
@@ -68,7 +68,7 @@ export class AppControllerV2 {
     @Public()
     @HttpCode(HttpStatus.OK)
     @Get('features')
-    async features(): Promise<APIFeatures> {
+    features(): APIFeatures {
         return ['multiplayer'];
     }
 }

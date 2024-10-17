@@ -18,7 +18,7 @@ function getEnvType(): EnvType {
     return ['production', ' prod'].includes(node_env) ? 'prod' : 'dev';
 }
 
-function getPort(defaultPort: number = 3000): number {
+function getPort(defaultPort = 3000): number {
     const port = process.env.PORT;
     if (port === undefined) {
         return defaultPort;
@@ -36,9 +36,9 @@ function getPort(defaultPort: number = 3000): number {
     }
 }
 
-export async function getEnvironmentConfig(): Promise<
+export function getEnvironmentConfig(): 
     ErrorOr<EnvironmentConfig>
-> {
+ {
     const env_type = getEnvType();
 
     const database_url = process.env.DATABASE_URL;
