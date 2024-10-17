@@ -1,0 +1,16 @@
+.pnpm-store/
+.vscode/
+coverage/
+dist/
+node_modules/
+test/
+.dockerignore
+.gitignore
+.env
+.eslintrc.js
+audit-ci.jsonc
+.prettierrc
+config.json
+config.json.example
+jest.config.ts
+README.md
