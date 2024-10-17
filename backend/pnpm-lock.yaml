@@ -35,6 +35,9 @@ importers:
       class-validator:
         specifier: ^0.14.1
         version: 0.14.1
+      prisma:
+        specifier: ^5.21.0
+        version: 5.21.0
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
@@ -90,9 +93,6 @@ importers:
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
-      prisma:
-        specifier: ^5.21.0
-        version: 5.21.0
       source-map-support:
         specifier: ^0.5.21
         version: 0.5.21
