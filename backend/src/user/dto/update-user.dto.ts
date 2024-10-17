@@ -44,8 +44,8 @@ export class UpdateUserDto
     @MinLength(userConstants.password.min)
     @MaxLength(userConstants.password.max)
     @ValidateIf((object: UpdateUserDto) => object.password !== undefined)
-    @Match<UpdateUserDto, 'password'>('password', { secret: true })
     @IsDefined()
+    @Match<UpdateUserDto, 'password'>('password', { secret: true })
     passwordConfirm?: string;
 
     @ApiProperty({ enum: UserRole })

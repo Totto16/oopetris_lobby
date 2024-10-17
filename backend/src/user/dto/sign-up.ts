@@ -40,7 +40,7 @@ export class SignUpDto implements UserSignUpBase {
     @IsString()
     @MinLength(userConstants.password.min)
     @MaxLength(userConstants.password.max)
-    @Match('password', { secret: true })
     @IsDefined()
+    @Match('password', { secret: true })
     passwordConfirm!: string;
 }

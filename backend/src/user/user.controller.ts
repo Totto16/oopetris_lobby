@@ -92,6 +92,28 @@ export class UserController {
         return temp;
     }
 
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: 'The token was correct and the user was returned.',
+        schema: { nullable: true, type: getSchemaPath(User) },
+    })
+    @ApiResponse({
+        status: HttpStatus.UNAUTHORIZED,
+        description: 'The token was incorrect',
+        type: ValidatorErrorDto<HttpStatus.UNAUTHORIZED>,
+    })
+    @ApiResponse({
+        status: HttpStatus.BAD_REQUEST,
+        description: "The user couldn't be found",
+        type: ValidatorErrorDto<HttpStatus.BAD_REQUEST>,
+    })
+    @ApiBearerAuth()
+    @HttpCode(HttpStatus.OK)
+    @Get('self')
+    getSelf(@Req() req: AuthenticatedRequest): User {
+        return req.user.user;
+    }
+
     @ApiBearerAuth()
     @AdminOnly()
     @HttpCode(HttpStatus.OK)

@@ -4,7 +4,7 @@ import { UserService } from './user.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthService } from '../auth/auth.service';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
-import supertest from 'supertest';
+import * as request from 'supertest';
 import { isUUID, validate } from 'class-validator';
 import { User } from './entities/user.entity';
 import { compareSync } from 'bcrypt';
@@ -14,6 +14,8 @@ import { sleep } from '../test/helpers';
 import { UserRole } from '@shared/user';
 import { randomUUID } from 'crypto';
 import { ConfigService } from '../config/config.service';
+import { ConfigModule } from '../config/config.module';
+import { AppModule } from '../app/app.module';
 
 const USERNAME = 'testController4';
 const PASSWORD = 'f67F86n9gf97oidvl%%';
@@ -26,7 +28,7 @@ describe('UserController', () => {
     async function getToken(password?: string): Promise<string> {
         let userToken: string | null = null;
         while (userToken === null) {
-            const res = await supertest(app.getHttpServer())
+            const res = await request(app.getHttpServer())
                 .post('/user/login')
                 .send({
                     username: USERNAME,
@@ -44,9 +46,12 @@ describe('UserController', () => {
         return userToken;
     }
     beforeEach(async () => {
+        await ConfigModule.setup();
+
         const module: TestingModule = await Test.createTestingModule({
+            imports: [AppModule],
             controllers: [UserController],
-            providers: [UserService, ConfigService, PrismaService, AuthService],
+            providers: [ConfigService, PrismaService, AuthService, UserService],
         }).compile();
 
         controller = module.get<UserController>(UserController);
@@ -57,6 +62,8 @@ describe('UserController', () => {
     });
 
     afterAll(async () => {
+        await ConfigModule.setup();
+
         const module: TestingModule = await Test.createTestingModule({
             providers: [ConfigService, PrismaService],
         }).compile();
@@ -72,7 +79,7 @@ describe('UserController', () => {
     describe('when registering', () => {
         describe('and using valid data', () => {
             it('should return the correct error', () => {
-                return supertest(app.getHttpServer())
+                return request(app.getHttpServer())
                     .post('/user/create')
                     .send({
                         haha: 'xD',
@@ -102,7 +109,7 @@ describe('UserController', () => {
 
         describe('and using invalid data', () => {
             it('should return the correct error', () => {
-                return supertest(app.getHttpServer())
+                return request(app.getHttpServer())
                     .post('/user/create')
                     .send({
                         username: '1',
@@ -122,7 +129,7 @@ describe('UserController', () => {
 
         describe('and using valid data', () => {
             it('should return the correct error', () => {
-                return supertest(app.getHttpServer())
+                return request(app.getHttpServer())
                     .post('/user/create')
                     .send({
                         username:
@@ -141,7 +148,7 @@ describe('UserController', () => {
             });
 
             it('should return the correct error', () => {
-                return supertest(app.getHttpServer())
+                return request(app.getHttpServer())
                     .post('/user/create')
                     .send({
                         username: 'test123',
@@ -160,7 +167,7 @@ describe('UserController', () => {
                     });
             });
             it('should return the correct error', () => {
-                return supertest(app.getHttpServer())
+                return request(app.getHttpServer())
                     .post('/user/create')
                     .send({
                         username: 'test123',
@@ -180,7 +187,7 @@ describe('UserController', () => {
                     });
             });
             it('should return the correct error', () => {
-                return supertest(app.getHttpServer())
+                return request(app.getHttpServer())
                     .post('/user/create')
                     .send({
                         username: 'test123',
@@ -195,7 +202,7 @@ describe('UserController', () => {
                     });
             });
             it('should return the correct error', () => {
-                return supertest(app.getHttpServer())
+                return request(app.getHttpServer())
                     .post('/user/create')
                     .send({
                         username: 'test123',
@@ -216,7 +223,7 @@ describe('UserController', () => {
 
         describe('and using valid data', () => {
             it('should succeed', () => {
-                return supertest(app.getHttpServer())
+                return request(app.getHttpServer())
                     .post('/user/create')
                     .send({
                         username: USERNAME,
@@ -244,29 +251,30 @@ describe('UserController', () => {
             it('should fail to create a user with the same username', async () => {
                 await getToken();
 
-                return supertest(app.getHttpServer())
+                const newPassword = 'sguvkjfvSDGSD%%';
+
+                return request(app.getHttpServer())
                     .post('/user/create')
                     .send({
                         username: USERNAME,
-                        password: 'sguvkjfvSDGSD%%',
-                        passwordConfirm: 'sguvkjfvSDGSD%%',
+                        password: newPassword,
+                        passwordConfirm: newPassword,
                     })
                     .expect(HttpStatus.UNPROCESSABLE_ENTITY)
                     .expect({
                         statusCode: 422,
                         message:
-                            "couldn't create user: There is a unique constraint violation: field 'User_username_key' has to be unique",
+                            "couldn't create user: There is a unique constraint violation: field 'username' has to be unique",
                     });
             });
 
             it('should get an user from an access token', async () => {
                 const token = await getToken();
 
-                return supertest(app.getHttpServer())
-                    .post('/user/token')
-                    .send({
-                        token,
-                    })
+                return request(app.getHttpServer())
+                    .get('/user/self')
+                    .set('Authorization', `Bearer ${token}`)
+                    .send()
                     .expect(HttpStatus.OK)
                     .then(async (response) => {
                         const user: User = response.body as User;
@@ -288,7 +296,7 @@ describe('UserController', () => {
             it('should get all user', async () => {
                 const token = await getToken();
 
-                return supertest(app.getHttpServer())
+                return request(app.getHttpServer())
                     .get('/user/all')
                     .set('Authorization', `Bearer ${token}`)
                     .send()
@@ -310,7 +318,7 @@ describe('UserController', () => {
             it('should return error when trying to get invalid user', async () => {
                 const token = await getToken();
 
-                return supertest(app.getHttpServer())
+                return request(app.getHttpServer())
                     .get(`/user/find/${randomUUID()}`)
                     .set('Authorization', `Bearer ${token}`)
                     .send()
@@ -324,14 +332,13 @@ describe('UserController', () => {
                 const token = await getToken();
 
                 const user: User = (
-                    await supertest(app.getHttpServer())
-                        .post('/user/token')
-                        .send({
-                            token,
-                        })
+                    await request(app.getHttpServer())
+                        .get('/user/self')
+                        .set('Authorization', `Bearer ${token}`)
+                        .send()
                 ).body as User;
 
-                return supertest(app.getHttpServer())
+                return request(app.getHttpServer())
                     .get(`/user/find/${user.id}`)
                     .set('Authorization', `Bearer ${token}`)
                     .send()
@@ -348,14 +355,15 @@ describe('UserController', () => {
             const token = await getToken();
 
             const user: User = (
-                await supertest(app.getHttpServer()).post('/user/token').send({
-                    token,
-                })
+                await request(app.getHttpServer())
+                    .get('/user/self')
+                    .set('Authorization', `Bearer ${token}`)
+                    .send()
             ).body as User;
 
             user.role = UserRole.Admin;
 
-            return supertest(app.getHttpServer())
+            return request(app.getHttpServer())
                 .patch(`/user/${user.id}`)
                 .set('Authorization', `Bearer ${token}`)
                 .send({ role: user.role })
@@ -372,17 +380,22 @@ describe('UserController', () => {
             const token = await getToken();
 
             const user: User = (
-                await supertest(app.getHttpServer()).post('/user/token').send({
-                    token,
-                })
+                await request(app.getHttpServer())
+                    .get('/user/self')
+                    .set('Authorization', `Bearer ${token}`)
+                    .send()
             ).body as User;
 
             user.role = UserRole.Admin;
 
-            return supertest(app.getHttpServer())
+            return request(app.getHttpServer())
                 .patch(`/user/${user.id}`)
                 .set('Authorization', `Bearer ${token}`)
-                .send({ role: user.role, password: PASSWORD + 's' })
+                .send({
+                    role: user.role,
+                    password: PASSWORD + 's',
+                    passwordConfirm: PASSWORD + 's',
+                })
                 .expect(HttpStatus.OK)
                 .then(async (response) => {
                     const user2: User = response.body as User;
@@ -401,7 +414,7 @@ describe('UserController', () => {
         it('should fail to delete an non-existent user', async () => {
             const token = await getToken(PASSWORD + 's');
 
-            return supertest(app.getHttpServer())
+            return request(app.getHttpServer())
                 .delete(`/user/${randomUUID()}`)
                 .set('Authorization', `Bearer ${token}`)
                 .send()
@@ -414,13 +427,14 @@ describe('UserController', () => {
         it('should be able to delete the user', async () => {
             const token = await getToken(PASSWORD + 's');
             const user: User = (
-                await supertest(app.getHttpServer()).post('/user/token').send({
-                    token,
-                })
+                await request(app.getHttpServer())
+                    .get('/user/self')
+                    .set('Authorization', `Bearer ${token}`)
+                    .send()
             ).body as User;
 
-            return supertest(app.getHttpServer())
-                .delete(`/user/${user.id}`)
+            return request(app.getHttpServer())
+                .delete(`/user/`)
                 .set('Authorization', `Bearer ${token}`)
                 .send()
                 .expect(HttpStatus.OK)
@@ -429,15 +443,14 @@ describe('UserController', () => {
                     await expect(validate(user)).resolves.toStrictEqual([]);
                     expect(user).toStrictEqual(user2);
 
-                    const res = await supertest(app.getHttpServer())
-                        .post('/user/token')
-                        .send({
-                            token,
-                        });
+                    const res = await request(app.getHttpServer())
+                        .get('/user/self')
+                        .set('Authorization', `Bearer ${token}`)
+                        .send();
 
-                    expect(res.statusCode).toStrictEqual(200);
-
-                    expect(res.body).toStrictEqual({});
+                    expect(res.statusCode).toStrictEqual(
+                        HttpStatus.UNAUTHORIZED,
+                    );
                 });
         });
     });

@@ -14,8 +14,7 @@ const jestConfig: JestConfigWithTsJest = {
     },
     testMatch: [
         '**/__tests__/**/*.[jt]s?(x)',
-        //        '**/?(*.)+(spec|test).[jt]s?(x)',
-        '**/app.service.spec.ts',
+        '**/?(*.)+(spec|test).[jt]s?(x)',
     ],
     collectCoverageFrom: ['**/*.(t|j)s'],
     coverageDirectory: './coverage',
