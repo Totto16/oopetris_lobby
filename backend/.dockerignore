@@ -7,7 +7,7 @@ test/
 .dockerignore
 .gitignore
 .env
-.eslintrc.js
+eslint.config.cjs
 audit-ci.jsonc
 .prettierrc
 config.json
