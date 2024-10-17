@@ -4,9 +4,24 @@ import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcrypt';
 import { SignInDto } from '../user/dto/sign-in';
 import type { JWTResponse } from '@shared/user';
-export interface JWTContent {
+import type { JwtPayload } from 'src/compatibility';
+interface JWTContentV2 {
     id: string;
     username: string;
+}
+
+export type JWTContent = JwtPayload | JWTContentV2;
+
+function isV2JWTPayload(payload: JWTContent): payload is JWTContentV2 {
+    return (payload as any)['id'] !== undefined;
+}
+
+export function getUserId(content: JWTContent): string {
+    if (isV2JWTPayload(content)) {
+        return content.id;
+    }
+
+    return content.user_id;
 }
 
 @Injectable()

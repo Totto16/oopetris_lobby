@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { JWTContent } from './auth.service';
+import { getUserId, JWTContent } from './auth.service';
 import { IS_PUBLIC_KEY } from '@decorators/all';
 import { Reflector } from '@nestjs/core';
 import type { UserBase } from '@shared/user';
@@ -72,11 +72,13 @@ export class AuthGuard implements CanActivate {
                 },
             );
 
-            const user = await this.userService.findOne(payload.id);
+            const id = getUserId(payload);
+
+            const user = await this.userService.findOne(id);
 
             if (!user) {
                 throw new UnauthorizedException(
-                    `User could not be found: id ${payload.id}`,
+                    `User could not be found: id ${id}`,
                 );
             }
             const result = { ...payload, user };

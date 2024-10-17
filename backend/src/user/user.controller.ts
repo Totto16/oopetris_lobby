@@ -57,18 +57,6 @@ export class UserController {
         description: "The user couldn't be found",
         type: ValidatorErrorDto<HttpStatus.UNAUTHORIZED>,
     })
-    @HttpCode(HttpStatus.OK)
-    @Post('token')
-    async getUserByToken(
-        @Body() { token }: { token: string },
-    ): Promise<User | null> {
-        const payload: JWTContent = await this.jwtService.verifyAsync(token, {
-            secret: this.configService.config.config.jwt_secret,
-        });
-
-        return this.userService.findOne(payload.id);
-    }
-
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('login')
@@ -139,7 +127,7 @@ export class UserController {
         @Req() req: AuthenticatedRequest,
         @Body() updateUserDto: UpdateUserDto,
     ): Promise<User | null> {
-        return this.userService.update(req.user.id, updateUserDto);
+        return this.userService.update(req.user.user.id, updateUserDto);
     }
 
     @ApiBearerAuth()
@@ -157,7 +145,7 @@ export class UserController {
     @Delete('')
     @HttpCode(HttpStatus.OK)
     async delete(@Req() req: AuthenticatedRequest): Promise<User | null> {
-        return this.userService.delete(req.user.id);
+        return this.userService.delete(req.user.user.id);
     }
 
     @ApiBearerAuth()

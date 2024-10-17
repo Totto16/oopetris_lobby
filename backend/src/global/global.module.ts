@@ -13,7 +13,7 @@ import { ConfigService } from 'src/config/config.service';
                 return {
                     secret: configService.config.config.jwt_secret,
                     //TODO: maybe make changeable
-                    signOptions: { expiresIn: '7d' },
+                    signOptions: { expiresIn: '7d', algorithm: 'HS256' },
                 };
             },
         }),
