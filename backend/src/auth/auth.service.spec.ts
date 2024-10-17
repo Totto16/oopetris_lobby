@@ -5,6 +5,8 @@ import { PrismaService } from '../prisma/prisma.service';
 import { UnauthorizedException } from '@nestjs/common';
 import { sleep, waitUntilDoesNotThrow } from '../test/hepers';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { ConfigService } from 'src/config/config.service';
+
 const PASSWORD = 'Test123$';
 const USERNAME = 'test2';
 
@@ -35,7 +37,7 @@ describe('AuthService', () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            providers: [AuthService, UserService, PrismaService],
+            providers: [AuthService, UserService, ConfigService, PrismaService],
         }).compile();
 
         const userService = module.get<UserService>(UserService);
@@ -58,7 +60,7 @@ describe('AuthService', () => {
 
     afterEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            providers: [PrismaService],
+            providers: [ConfigService, PrismaService],
         }).compile();
 
         const prisma = module.get<PrismaService>(PrismaService);

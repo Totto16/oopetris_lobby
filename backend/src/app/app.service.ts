@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { Subject } from 'rxjs';
-import { ConfigService } from 'src/config/config.service';
-import { type DbHealth, PrismaService } from 'src/prisma/prisma.service';
+import { ConfigService } from '../config/config.service';
+import { type DbHealth, PrismaService } from '../prisma/prisma.service';
 
 export interface HealthCheck {
     date: Date;

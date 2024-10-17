@@ -10,9 +10,10 @@ import { User } from './entities/user.entity';
 import { compareSync } from 'bcrypt';
 import type { JWTResponse } from '@shared/user';
 import { Server } from 'net';
-import { sleep } from 'src/test/hepers';
+import { sleep } from '../test/hepers';
 import { UserRole } from '@shared/user';
 import { randomUUID } from 'crypto';
+import { ConfigService } from '../config/config.service';
 
 const USERNAME = 'testController4';
 const PASSWORD = 'f67F86n9gf97oidvl%%';
@@ -45,7 +46,7 @@ describe('UserController', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             controllers: [UserController],
-            providers: [UserService, PrismaService, AuthService],
+            providers: [UserService, ConfigService, PrismaService, AuthService],
         }).compile();
 
         controller = module.get<UserController>(UserController);
@@ -57,7 +58,7 @@ describe('UserController', () => {
 
     afterAll(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            providers: [PrismaService],
+            providers: [ConfigService, PrismaService],
         }).compile();
 
         const prisma = module.get<PrismaService>(PrismaService);

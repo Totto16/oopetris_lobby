@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { readFile } from 'node:fs/promises';
 import * as fs from 'node:fs';
-import { error, success, type ErrorOr } from 'src/common/error';
+import { error, success, type ErrorOr } from '../common/error';
 
 export const configSchema = z
     .object({

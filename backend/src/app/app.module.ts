@@ -9,8 +9,8 @@ import { AppService } from './app.service';
 import { PrismaModule } from '../prisma/prisma.module';
 import { UserModule } from '../user/user.module';
 import { globalProviders } from '../helpers';
-import { GlobalModule } from 'src/global/global.module';
-import { ConfigModule } from 'src/config/config.module';
+import { GlobalModule } from '../global/global.module';
+import { ConfigModule } from '../config/config.module';
 
 @Module({
     imports: [GlobalModule, ConfigModule, PrismaModule, UserModule],

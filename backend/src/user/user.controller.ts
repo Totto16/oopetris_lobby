@@ -27,7 +27,7 @@ import { AuthService } from '../auth/auth.service';
 import { SignInDto } from './dto/sign-in';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from '../prisma/prisma.service';
-import type { AuthenticatedRequest } from 'src/auth/auth.guard';
+import type { AuthenticatedRequest } from '../auth/auth.guard';
 import { type JWTResponse } from '@shared/user';
 import { JWTResponseDTO } from './dto/token';
 

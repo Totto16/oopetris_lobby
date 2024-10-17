@@ -12,9 +12,9 @@ import { ApiTags } from '@nestjs/swagger';
 import { AdminOnly, Public } from '@decorators/all';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { VersionResponse, type APIFeatures } from '@shared/genral';
-import { commit as compatibilityCommit } from 'src/compatibility';
-import { commit as currentCommit } from 'src/generated/commit';
-import { currentVersion } from 'src/common/common';
+import { commit as compatibilityCommit } from '../compatibility';
+import { commit as currentCommit } from '../generated/commit';
+import { currentVersion } from '../common/common';
 @ApiTags('general')
 @Controller({ version: VERSION_NEUTRAL })
 export class AppController {

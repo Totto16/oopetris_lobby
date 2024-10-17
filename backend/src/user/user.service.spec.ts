@@ -6,6 +6,7 @@ import { User } from './entities/user.entity';
 import { compareSync } from 'bcrypt';
 import { isUUID } from 'class-validator';
 import { UserRole } from '@shared/user';
+import { ConfigService } from '../config/config.service';
 
 const PASSWORD = 'Test13%';
 const USERNAME = 'test3';
@@ -15,7 +16,7 @@ describe('UserService', () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            providers: [AuthService, UserService, PrismaService],
+            providers: [AuthService, UserService, ConfigService, PrismaService],
         }).compile();
 
         service = module.get<UserService>(UserService);
@@ -23,7 +24,7 @@ describe('UserService', () => {
 
     afterAll(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            providers: [PrismaService],
+            providers: [ConfigService, PrismaService],
         }).compile();
 
         const prisma = module.get<PrismaService>(PrismaService);

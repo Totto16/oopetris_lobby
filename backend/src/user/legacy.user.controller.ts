@@ -15,14 +15,14 @@ import { ValidatorErrorDto } from './dto/error';
 import { AuthService } from '../auth/auth.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from '../prisma/prisma.service';
-import type { AuthenticatedRequest } from 'src/auth/auth.guard';
+import type { AuthenticatedRequest } from '../auth/auth.guard';
 import {
     LoginResponse,
     type Credentials,
     type PlayerInfo,
     type RegisterRequest,
     type UserList,
-} from 'src/compatibility';
+} from '../compatibility';
 
 @ApiTags('user')
 @Controller({ version: '1' })

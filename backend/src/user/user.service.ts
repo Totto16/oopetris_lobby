@@ -7,7 +7,7 @@ import { hashSync } from 'bcrypt';
 import { BCRYPT_SALT_AMOUNT } from './constants';
 import { User } from './entities/user.entity';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import type { RegisterRequest } from 'src/compatibility';
+import type { RegisterRequest } from '../compatibility';
 
 @Injectable()
 export class UserService {

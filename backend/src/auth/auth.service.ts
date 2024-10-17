@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcrypt';
 import { SignInDto } from '../user/dto/sign-in';
 import type { JWTResponse } from '@shared/user';
-import type { JwtPayload, LoginResponse } from 'src/compatibility';
+import type { JwtPayload, LoginResponse } from '../compatibility';
 interface JWTContentV2 {
     id: string;
     username: string;

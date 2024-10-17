@@ -9,7 +9,7 @@ import {
     isError,
     success,
     type ErrorOr,
-} from 'src/common/error';
+} from '../common/error';
 import { getEnvironmentConfig } from './environment';
 
 @Module({

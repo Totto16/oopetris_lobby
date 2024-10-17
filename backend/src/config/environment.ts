@@ -1,4 +1,4 @@
-import { error, success, type ErrorOr } from 'src/common/error';
+import { error, success, type ErrorOr } from '../common/error';
 
 export type EnvType = 'dev' | 'prod';
 
