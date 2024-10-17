@@ -5,9 +5,10 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { AuthService } from '../auth/auth.service';
 import { globalProviders } from '../helpers';
 import { ConfigModule } from 'src/config/config.module';
+import { LegacyUserController } from './legacy.user.controller';
 
 @Module({
-    controllers: [UserController],
+    controllers: [UserController, LegacyUserController],
     providers: [UserService, AuthService, ...globalProviders],
     imports: [ConfigModule, PrismaModule],
     exports: [UserService],

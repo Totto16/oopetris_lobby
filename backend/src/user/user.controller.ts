@@ -39,8 +39,6 @@ export class UserController {
     constructor(
         private readonly userService: UserService,
         private readonly authService: AuthService,
-        private readonly jwtService: JwtService,
-        private readonly configService: ConfigService,
     ) {}
 
     @ApiResponse({

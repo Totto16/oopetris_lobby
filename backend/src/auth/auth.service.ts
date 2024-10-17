@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcrypt';
 import { SignInDto } from '../user/dto/sign-in';
 import type { JWTResponse } from '@shared/user';
-import type { JwtPayload } from 'src/compatibility';
+import type { JwtPayload, LoginResponse } from 'src/compatibility';
 interface JWTContentV2 {
     id: string;
     username: string;
@@ -48,6 +48,26 @@ export class AuthService {
         const access_token = await this.jwtService.signAsync(payload);
         return {
             access_token,
+        };
+    }
+
+    async legacySignIn(signInDto: SignInDto): Promise<LoginResponse> {
+        const user = await this.userService.findOneByUsername(
+            signInDto.username,
+        );
+        if (user === undefined || user === null) {
+            throw new UnauthorizedException('User not found');
+        }
+
+        if (!bcrypt.compareSync(signInDto.password, user.password)) {
+            throw new UnauthorizedException('Wrong password');
+        }
+
+        const payload: JwtPayload = { user_id: user.id };
+
+        const jwt = await this.jwtService.signAsync(payload);
+        return {
+            jwt,
         };
     }
 }

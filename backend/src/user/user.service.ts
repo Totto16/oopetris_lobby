@@ -7,13 +7,14 @@ import { hashSync } from 'bcrypt';
 import { BCRYPT_SALT_AMOUNT } from './constants';
 import { User } from './entities/user.entity';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import type { RegisterRequest } from 'src/compatibility';
 
 @Injectable()
 export class UserService {
     constructor(private readonly prisma: PrismaService) {}
 
     async signUp(
-        signUpDto: SignUpDto,
+        signUpDto: SignUpDto | RegisterRequest,
     ): Promise<User | PrismaClientKnownRequestError> {
         const password: string = hashSync(
             signUpDto.password,
