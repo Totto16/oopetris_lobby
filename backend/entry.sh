@@ -4,4 +4,4 @@ set -e
 
 npx prisma db push
 
-node src/main.js
+exec node src/main.js

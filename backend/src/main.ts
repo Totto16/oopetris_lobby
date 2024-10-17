@@ -67,7 +67,7 @@ async function bootstrap(): Promise<void> {
         SwaggerModule.setup('swagger-ui', app, document);
     }
 
-    // deal with shutdown hooks (needed fro prisma)
+    // deal with shutdown hooks (needed for prisma)
     app.enableShutdownHooks();
 
     app.get<AppService>(AppService).subscribeToShutdown(() => app.close());
