@@ -34,5 +34,11 @@
         "src/shared/general"
       ]
     }
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    },
+    "files": true
   }
 }

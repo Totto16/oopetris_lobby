@@ -1,3 +1,4 @@
 .vscode/
 .env
 backend_config.json
+/database/

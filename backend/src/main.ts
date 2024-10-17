@@ -14,24 +14,15 @@ import {
 import { AppService } from './app/app.service';
 import { currentVersion } from './common/common';
 import { ConfigModule } from './config/config.module';
-import { getError, getResult, isError } from './common/error';
 
 async function bootstrap(): Promise<void> {
     let loggerSettings: LogLevel[] | undefined = undefined;
 
     const parsedConfig = await ConfigModule.setup();
 
-    if (isError(parsedConfig)) {
-        // the logger isn't initialized yet
-        console.error(
-            `Error while initializing the config: ${getError(parsedConfig)}!`,
-        );
-        process.exit(1);
-    }
-
     const {
         environment: { env_type, port },
-    } = getResult(parsedConfig);
+    } = parsedConfig;
 
     if (env_type === 'prod') {
         loggerSettings = ['error'];

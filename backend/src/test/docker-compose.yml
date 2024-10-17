@@ -1,0 +1,19 @@
+name: "oopetris-lobby-test"
+services:
+  db:
+    container_name: oopetris-lobby-db-test
+    image: postgres:17
+    restart: unless-stopped
+    shm_size: 128mb
+    healthcheck:
+      test: pg_isready -d oopetris_lobby_test -U postgres
+      interval: 5m
+      start_interval: 30s
+      start_period: 5s
+      retries: 3
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=oopetris_lobby_test
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    ports:
+      - 5432:5432

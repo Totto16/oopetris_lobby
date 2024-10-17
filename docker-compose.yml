@@ -11,9 +11,6 @@ services:
       start_interval: 30s
       start_period: 5s
       retries: 3
-
-    env_file:
-      - .env
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=oopetris_lobby
@@ -38,8 +35,6 @@ services:
     restart: unless-stopped
     depends_on:
       - db
-    env_file:
-      - .env
     environment:
       - DATABASE_URL=postgresql://postgres:${DATABASE_PASSWORD}@db:5432/oopetris_lobby
     volumes:

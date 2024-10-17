@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { readFile } from 'node:fs/promises';
 import * as fs from 'node:fs';
+import * as path from 'node:path';
 import { error, success, type ErrorOr } from '../common/error';
 
 export const configSchema = z
@@ -26,11 +27,12 @@ const stringToJSONSchema = z
     });
 
 export async function readConfig(filePath: string): Promise<ErrorOr<Config>> {
-    if (!fs.existsSync(filePath)) {
-        return error(`File does not exist`);
+    const file = path.resolve(filePath);
+    if (!fs.existsSync(file)) {
+        return error(`File does not exist : '${file}'`);
     }
 
-    const data = (await readFile(filePath)).toString();
+    const data = (await readFile(file)).toString();
 
     const json = await stringToJSONSchema.safeParseAsync(data);
     if (!json.success) {

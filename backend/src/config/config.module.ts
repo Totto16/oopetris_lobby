@@ -21,7 +21,7 @@ import { getEnvironmentConfig } from './environment';
 export class ConfigModule {
     private static _configService: ConfigService;
 
-    static async setup(): Promise<ErrorOr<GlobalConfig>> {
+    static async setupSafe(): Promise<ErrorOr<GlobalConfig>> {
         const environmentOrError = getEnvironmentConfig();
 
         if (isError(environmentOrError)) {
@@ -48,5 +48,19 @@ export class ConfigModule {
         ConfigService.setup(globalConfig);
 
         return success<GlobalConfig>(globalConfig);
+    }
+
+    static async setup(): Promise<GlobalConfig> {
+        const parsedConfig = await ConfigModule.setupSafe();
+
+        if (isError(parsedConfig)) {
+            // the logger isn't initialized yet
+            console.error(
+                `Error while initializing the config: ${getError(parsedConfig)}!`,
+            );
+            process.exit(1);
+        }
+
+        return getResult(parsedConfig);
     }
 }
