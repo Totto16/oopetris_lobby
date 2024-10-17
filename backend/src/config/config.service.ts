@@ -10,7 +10,7 @@ export interface GlobalConfig {
 // This is a singleton, that can be injected everywhere, and has the same config for all of the injected classes
 @Injectable()
 export class ConfigService {
-    private _config: GlobalConfig;
+    private _config!: GlobalConfig;
 
     private static _instance: ConfigService;
 

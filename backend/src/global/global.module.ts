@@ -12,7 +12,7 @@ import { ConfigService } from 'src/config/config.service';
             useFactory: async (configService: ConfigService) => {
                 return {
                     secret: configService.config.config.jwt_secret,
-                    //TODO: make changeable
+                    //TODO: maybe make changeable
                     signOptions: { expiresIn: '7d' },
                 };
             },
