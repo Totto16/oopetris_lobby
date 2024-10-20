@@ -1,0 +1,3 @@
+[submodule "backend/obpf/simulator"]
+	path = backend/obpf/simulator
+	url = https://github.com/OpenBrickProtocolFoundation/simulator.git
