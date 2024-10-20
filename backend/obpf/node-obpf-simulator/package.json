@@ -1,0 +1,55 @@
+{
+    "name": "node-obpf-simulator",
+    "version": "1.0.0",
+    "description": "Node js wrapper for the obpf simulator",
+    "gypfile": true,
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "dist/",
+        "prebuilds/",
+        "src/cpp/",
+        "binding.gyp",
+        "package.json",
+        "README.md"
+    ],
+    "private": true,
+    "scripts": {
+        "install": "node-gyp-build",
+        "build": "npm run build:gyp && npm run compile",
+        "build:gyp": "prebuildify -t 18.20.4 -t 20.18.0 -t 21.7.3 -t 22.9.0 --strip",
+        "build:debug": "prebuildify -t 18.20.4 -t 20.18.0 -t 21.7.3 -t 22.9.0 --debug",
+        "compile": "npm run build:tsc",
+        "build:tsc": "tsc"
+    },
+    "keywords": [
+        "obpf",
+        "tetris",
+        "cpp",
+        "node-gyp"
+    ],
+    "author": {
+        "name": "Totto16",
+        "url": "https://github.com/Totto16"
+    },
+    "license": "MIT",
+    "engines": {
+        "node": "^18.0.0 || ^20.0.0 || ^21.0.0 || ^22.0.0"
+    },
+    "os": [
+        "linux"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/OpenBrickProtocolFoundation/simulator.git"
+    },
+    "dependencies": {
+        "node-gyp-build": "^4.8.2"
+    },
+    "devDependencies": {
+        "nan": "^2.22.0",
+        "prebuildify": "^6.0.2",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.6.3"
+    }
+}
