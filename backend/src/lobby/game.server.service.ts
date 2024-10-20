@@ -4,6 +4,7 @@ import type { Lobby } from './entities/lobby.entity';
 import type { FireWall, RangeConfig } from '../config/schema';
 import * as os from 'node:os';
 import * as net from 'node:net';
+import obpfSimulator from 'node-obpf-simulator';
 
 type NetError = Error & { code?: string };
 
@@ -168,7 +169,7 @@ export class GameServerService {
         return port;
     }
 
-    async start(_port: number, _playerCount: number): Promise<void> {
-        //TODO: either use the configServer or a builtin node module
+    async start(port: number, playerCount: number): Promise<void> {
+        await obpfSimulator.start(port, playerCount);
     }
 }

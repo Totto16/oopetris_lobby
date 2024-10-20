@@ -6,7 +6,7 @@ This wraps [obpf/simulator](https://github.com/OpenBrickProtocolFoundation/simul
 
 ## Platform support
 
-We officially support ONLY Linux, since this is only meant to be run on a server!
+We officially support ONLY Linux with Clang and libstdc++, since this is only meant to be run on a server!
 
 ## How to use
 
