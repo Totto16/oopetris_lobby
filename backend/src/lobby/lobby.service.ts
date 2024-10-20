@@ -242,7 +242,6 @@ export class LobbyService {
                     }
 
                     if (lobby.lobby_status != LobbyStatus.Open) {
-                        //TODO: refactor into helper function
                         const reason = (() => {
                             switch (lobby.lobby_status) {
                                 case LobbyStatus.Closed:
@@ -474,7 +473,6 @@ export class LobbyService {
                     }
 
                     if (lobby.lobby_status != LobbyStatus.Open) {
-                        //TODO: refactor into helper function
                         const reason = (() => {
                             switch (lobby.lobby_status) {
                                 case LobbyStatus.Closed:
@@ -562,7 +560,6 @@ export class LobbyService {
                     }
 
                     if (lobby.lobby_status != LobbyStatus.Open) {
-                        //TODO: refactor into helper function
                         const reason = (() => {
                             switch (lobby.lobby_status) {
                                 case LobbyStatus.Closed:
@@ -775,7 +772,6 @@ export class LobbyService {
                     }
 
                     if (lobby.lobby_status != LobbyStatus.Open) {
-                        //TODO: refactor into helper function
                         const reason = (() => {
                             switch (lobby.lobby_status) {
                                 case LobbyStatus.Closed:
