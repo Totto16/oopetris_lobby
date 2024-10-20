@@ -1,8 +1,4 @@
-export async function sleep(ms: number): Promise<void> {
-    await new Promise<void>((res) => {
-        setTimeout(res, ms);
-    });
-}
+import { sleep } from '../common/common';
 
 export type Optional<T> = T | null;
 

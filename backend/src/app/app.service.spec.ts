@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { AppService } from './app.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '../config/config.service';
-import { ConfigModule } from 'src/config/config.module';
+import { ConfigModule } from '../config/config.module';
 
 describe('AppService', () => {
     let service: AppService;

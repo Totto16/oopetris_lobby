@@ -4,11 +4,55 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { error, success, type ErrorOr } from '../common/error';
 
-export const configSchema = z
+const firewallSchema = z.union([
+    z.literal('none'),
+    z.discriminatedUnion('type', [
+        z.object({ type: z.literal('ufw') }).strict(),
+        z.object({ type: z.literal('iptables') }).strict(),
+    ]),
+]);
+
+export type FireWall = z.infer<typeof firewallSchema>;
+
+const uint16_t_max = 2 ** 16;
+
+const rangeConfig = z
+    .object({
+        start: z.number().positive().int().lt(uint16_t_max),
+        end: z.number().positive().int().lt(uint16_t_max),
+    })
+    .strict()
+    .refine((data) => data.start >= data.end, {
+        message: '"start < end" has to be true',
+        path: ['end'],
+    });
+
+export type RangeConfig = z.infer<typeof rangeConfig>;
+
+const portConfigSchema = z
+    .discriminatedUnion('mode', [
+        z
+            .object({ mode: z.literal('random'), firewall: firewallSchema })
+            .strict(),
+        z
+            .object({
+                mode: z.literal('inRange'),
+                config: rangeConfig,
+                firewall: firewallSchema,
+            })
+            .strict(),
+    ])
+    .optional()
+    .default({ mode: 'random', firewall: 'none' });
+
+export type PortConfig = z.infer<typeof portConfigSchema>;
+
+const configSchema = z
     .object({
         jwt_secret: z.string(),
         gameserver_executable: z.string(),
         simulator_library_path: z.string(),
+        portConfig: portConfigSchema,
     })
     .strict();
 

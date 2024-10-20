@@ -18,7 +18,7 @@ model User {
   role     UserRole @default(User)
 
   LobbyPlayer LobbyPlayer? @ignore
-  Lobby       Lobby[]      @ignore
+  Lobby       Lobby?       @ignore
 
   @@index([id, username])
   @@map("user")
@@ -26,10 +26,13 @@ model User {
 
 model LobbyPlayer {
   player_id String @unique
-  player    User   @relation(fields: [player_id], references: [id])
+  // if a User gets deleted, the referencing LobbyPlayer gets deletd too, as it serves no purpose, 
+  // this may cascade down to the lobby, so that the player may get deleted there from the players array too
+  player    User   @relation(fields: [player_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   lobby_id String
-  lobby    Lobby  @relation(fields: [lobby_id], references: [id])
+  // if a Lobby gets deleted, the referencing LobbyPlayer gets deletd too, as it serves no purpose
+  lobby    Lobby  @relation(fields: [lobby_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   is_ready Boolean
 
@@ -43,12 +46,13 @@ model Lobby {
   name String
   size Int
 
-  host_id String
-  host    User   @relation(fields: [host_id], references: [id])
+  host_id String @unique
+  // if a user is deleted, he can't be in lobby as host, so we Restrict the deletion there 
+  host    User   @relation(fields: [host_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
   players LobbyPlayer[]
 
-  timestamp       DateTime
+  timestamp       DateTime    @default(now())
   lobby_status    LobbyStatus
   gameserver_port Int?
 

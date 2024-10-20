@@ -22,7 +22,6 @@ import {
     getSchemaPath,
 } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
-import { ValidatorErrorDto } from './dto/error';
 import { AuthService } from '../auth/auth.service';
 import { SignInDto } from './dto/sign-in';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
@@ -30,6 +29,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import type { AuthenticatedRequest } from '../auth/auth.guard';
 import { type JWTResponse } from '@shared/user';
 import { JWTResponseDTO } from './dto/token';
+import { ValidatorErrorDto } from '../common/dto';
 
 @ApiTags('user')
 @Controller({ version: '2', path: 'user' })

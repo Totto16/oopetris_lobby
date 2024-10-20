@@ -30,6 +30,9 @@
       "@shared/user": [
         "src/shared/user"
       ],
+      "@shared/lobby": [
+        "src/shared/lobby"
+      ],
       "@shared/genral": [
         "src/shared/general"
       ]

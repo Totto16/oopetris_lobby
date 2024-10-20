@@ -7,7 +7,7 @@ import { sleep, waitUntilDoesNotThrow } from '../test/helpers';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { ConfigService } from '../config/config.service';
 import { ConfigModule } from '../config/config.module';
-import { AppModule } from 'src/app/app.module';
+import { AppModule } from '../app/app.module';
 
 const PASSWORD = 'Test123$';
 const USERNAME = 'test2';

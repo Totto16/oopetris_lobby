@@ -4,7 +4,7 @@
  */
 
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, MaxLength } from 'class-validator';
+import { IsNumber, IsString, MaxLength } from 'class-validator';
 
 export const commit = 'b6eb82abe014de3caf7573b32a79eee609326fb0';
 
@@ -77,4 +77,44 @@ export class LoginResponse {
     })
     @IsString()
     jwt!: string;
+}
+
+export interface LobbyInfoReturnValue {
+    id: string;
+    name: string;
+    size: number;
+    num_players_in_lobby: number;
+    host_info: HostInfo;
+}
+
+export interface LobbyListResponse {
+    lobbies: LobbyInfoReturnValue[];
+}
+
+export interface LobbyResponse {
+    name: string;
+    size: number;
+    host_info: HostInfo;
+    player_infos: PlayerInfo[];
+    gameserver_port: number | null;
+}
+
+export interface StartResponse {
+    port: number;
+}
+
+export class CreateLobbyRequest {
+    @IsString()
+    name!: string;
+
+    @IsNumber()
+    size!: number;
+}
+
+export interface LobbyCreationResponse {
+    id: string;
+}
+
+export interface SetClientReadyResponse{
+    port: number
 }

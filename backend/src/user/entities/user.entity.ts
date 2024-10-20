@@ -4,19 +4,19 @@ import { UserRole, UserBase, userConstants } from '@shared/user';
 
 export class User implements UserType, UserBase {
     @ApiProperty({
-        description: ' The unique user id (uuid)',
+        description: 'The unique user id (uuid)',
     })
     id!: string;
 
     @ApiProperty({
-        description: ' The unique username',
+        description: 'The unique username',
         minimum: userConstants.username.min,
         maximum: userConstants.username.max,
     })
     username!: string;
 
     @ApiProperty({
-        description: ' The hashed ands salted password',
+        description: 'The hashed ands salted password',
         minimum: userConstants.password.min,
         maximum: userConstants.password.max,
     })

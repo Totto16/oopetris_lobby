@@ -8,6 +8,22 @@ export interface HealthCheck {
     db: DbHealth;
 }
 
+export type SupportedVersion = 'legacy' | 'modern';
+
+export interface SupportedEndpoints {
+    version: SupportedVersion;
+    path: string;
+}
+
+export interface SupportedAPI {
+    user: SupportedEndpoints[];
+    lobby: SupportedEndpoints[];
+}
+
+export interface ServerInfo {
+    supported_api: SupportedAPI;
+}
+
 @Injectable()
 export class AppService implements OnModuleDestroy {
     private shutdownListener$ = new Subject<void>();
@@ -33,6 +49,18 @@ export class AppService implements OnModuleDestroy {
     async healthCheck(): Promise<HealthCheck> {
         const dbHealth = await this.prismaService.getHealthStatus();
         return { date: new Date(), db: dbHealth };
+    }
+
+    getInfo(): ServerInfo {
+        return {
+            supported_api: {
+                lobby: [{ path: 'v1', version: 'legacy' }],
+                user: [
+                    { path: 'v1', version: 'legacy' },
+                    { path: 'v2', version: 'modern' },
+                ],
+            },
+        };
     }
 
     shutdown(): void {

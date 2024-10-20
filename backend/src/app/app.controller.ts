@@ -7,7 +7,7 @@ import {
     VERSION_NEUTRAL,
 } from '@nestjs/common';
 
-import { AppService, HealthCheck } from './app.service';
+import { AppService, HealthCheck, type ServerInfo } from './app.service';
 import { ApiTags } from '@nestjs/swagger';
 import { AdminOnly, Public } from '@decorators/all';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -15,16 +15,27 @@ import { VersionResponse, type APIFeatures } from '@shared/genral';
 import { commit as compatibilityCommit } from '../compatibility';
 import { commit as currentCommit } from '../generated/commit';
 import { currentVersion } from '../common/common';
+import type { ConfigService } from 'src/config/config.service';
 @ApiTags('general')
 @Controller({ version: VERSION_NEUTRAL })
 export class AppController {
-    constructor(private readonly appService: AppService) {}
+    constructor(
+        private readonly appService: AppService,
+        private readonly configService: ConfigService,
+    ) {}
 
     @Public()
     @HttpCode(HttpStatus.OK)
     @Get('healthcheck')
     async healthCheck(): Promise<HealthCheck> {
         return this.appService.healthCheck();
+    }
+
+    @Public()
+    @HttpCode(HttpStatus.OK)
+    @Get('info')
+    info(): ServerInfo {
+        return this.appService.getInfo();
     }
 
     @ApiBearerAuth()

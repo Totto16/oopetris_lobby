@@ -11,7 +11,6 @@ import {
 import { UserService } from './user.service';
 import { Public } from '@decorators/all';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ValidatorErrorDto } from './dto/error';
 import { AuthService } from '../auth/auth.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from '../prisma/prisma.service';
@@ -23,6 +22,7 @@ import {
     type RegisterRequest,
     type UserList,
 } from '../compatibility';
+import { ValidatorErrorDto } from '../common/dto';
 
 @ApiTags('user')
 @Controller({ version: '1' })
