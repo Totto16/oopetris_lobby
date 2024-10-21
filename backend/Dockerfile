@@ -1,4 +1,4 @@
-FROM ubuntu:24.04 AS cpp-buildenv
+FROM debian:bookworm AS cpp-buildenv
 
 WORKDIR /tmp
 
@@ -9,9 +9,9 @@ RUN apt-get update && \
     wget https://apt.llvm.org/llvm.sh && \
     chmod +x llvm.sh && \
     ./llvm.sh 19 && \
-    wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null && \
-    echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ noble main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null && \
-    apt-get update && apt-get install --no-install-recommends cmake clang-tools-19 -y && \
+    echo "deb http://deb.debian.org/debian bookworm-backports main" > /etc/apt/sources.list.d/new.list && \
+    apt-get update && \
+    apt-get install --no-install-recommends cmake=3.30.5-1~bpo12+1 cmake-data=3.30.5-1~bpo12+1 clang-tools-19 -y && \
     rm -rf /var/lib/apt/lists/* 
 
 ENV CC=clang-19
