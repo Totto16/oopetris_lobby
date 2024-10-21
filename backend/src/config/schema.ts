@@ -50,8 +50,6 @@ export type PortConfig = z.infer<typeof portConfigSchema>;
 const configSchema = z
     .object({
         jwt_secret: z.string(),
-        gameserver_executable: z.string(),
-        simulator_library_path: z.string(),
         portConfig: portConfigSchema,
     })
     .strict();

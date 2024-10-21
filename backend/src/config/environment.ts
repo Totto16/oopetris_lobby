@@ -7,6 +7,8 @@ export interface EnvironmentConfig {
     database_url: string;
     config_path: string;
     port: number;
+    gameserver_executable: string;
+    gamserver_cwd: string | undefined;
 }
 
 function getEnvType(): EnvType {
@@ -36,9 +38,7 @@ function getPort(defaultPort = 3000): number {
     }
 }
 
-export function getEnvironmentConfig(): 
-    ErrorOr<EnvironmentConfig>
- {
+export function getEnvironmentConfig(): ErrorOr<EnvironmentConfig> {
     const env_type = getEnvType();
 
     const database_url = process.env.DATABASE_URL;
@@ -55,11 +55,26 @@ export function getEnvironmentConfig():
 
     const port = getPort();
 
+    const gameserver_executable = process.env.OBPF_GAMESERVER_EXECUTABLE;
+
+    if (
+        gameserver_executable === undefined ||
+        gameserver_executable.length === 0
+    ) {
+        return error(
+            "Environment variables 'OBPF_GAMESERVER_EXECUTABLE' not specified",
+        );
+    }
+
+    const gamserver_cwd = process.env.OBPF_GAMSERVER_CWD;
+
     const result: EnvironmentConfig = {
         env_type,
         database_url,
         config_path,
         port,
+        gameserver_executable,
+        gamserver_cwd,
     };
 
     return success(result);
