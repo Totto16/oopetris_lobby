@@ -14,3 +14,7 @@ config.json
 config.json.example
 jest.config.ts
 README.md
+
+obpf/simulator/.github/
+obpf/simulator/assets/
+obpf/simulator/build/
