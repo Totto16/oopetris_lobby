@@ -1,8 +1,8 @@
 
 
-#include "./logger.hpp"
+#include "./worker.hpp"
 
-static v8::Local<v8::Value>
+v8::Local<v8::Value>
 details::get_js_level(const spdlog::level::level_enum level) {
 
   switch (level) {
@@ -25,7 +25,7 @@ details::get_js_level(const spdlog::level::level_enum level) {
   }
 }
 
-static std::vector<v8::Local<v8::Value>>
+std::vector<v8::Local<v8::Value>>
 details::get_arguments(const spdlog::level::level_enum level,
                        const std::string &msg,
                        const spdlog::log_clock::time_point time) {

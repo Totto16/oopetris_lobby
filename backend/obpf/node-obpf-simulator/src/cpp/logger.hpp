@@ -13,18 +13,9 @@
 #pragma GCC diagnostic pop
 #endif
 
+#include "./worker.hpp"
 #include <mutex>
 #include <spdlog/sinks/base_sink.h>
-
-namespace details {
-
-static v8::Local<v8::Value> get_js_level(const spdlog::level::level_enum level);
-
-static std::vector<v8::Local<v8::Value>>
-get_arguments(const spdlog::level::level_enum level, const std::string &msg,
-              const spdlog::log_clock::time_point time);
-
-} // namespace details
 
 namespace logger {
 
@@ -32,80 +23,64 @@ using Callback =
     std::function<void(spdlog::level::level_enum, const std::string &,
                        spdlog::log_clock::time_point)>;
 
-using CallbackContext =
-    std::pair<std::unique_ptr<Nan::Callback>, v8::Isolate *>;
-
-using Callbacks = std::vector<std::shared_ptr<CallbackContext>>;
+using Callbacks = std::vector<std::unique_ptr<Nan::Callback>>;
 
 template <typename Mutex>
 class node_sink : public spdlog::sinks::base_sink<Mutex> {
 private:
   Callbacks m_callbacks;
+  v8::Isolate *m_isolate;
+  std::unique_ptr<Nan::AsyncResource> m_resource;
 
 public:
-  node_sink(/* v8::Isolate *isolate, */ Callbacks &&callbacks)
-      : m_callbacks{std::move(callbacks)} {
-    // this->mutex_.set_isolate(isolate);
-  }
+  node_sink(v8::Isolate *isolate,
+            std::unique_ptr<Nan::AsyncResource> &&resource,
+            Callbacks &&callbacks)
+      : m_callbacks{std::move(callbacks)}, m_isolate{isolate},
+        m_resource{std::move(resource)} {}
 
-  node_sink(/* v8::Isolate *isolate */) : m_callbacks{} {
-    // this->mutex_.set_isolate(isolate);
-  }
+  node_sink(v8::Isolate *isolate,
+            std::unique_ptr<Nan::AsyncResource> &&resource)
+      : m_callbacks{}, m_isolate{isolate}, m_resource{std::move(resource)} {}
 
   void add(std::unique_ptr<Nan::Callback> &&callback, v8::Isolate *isolate) {
 
-    auto pair = std::make_pair<std::unique_ptr<Nan::Callback>, v8::Isolate *>(
-        std::move(callback), std::move(isolate));
-
-    auto cb = std::make_shared<CallbackContext>(std::move(pair));
-
-    m_callbacks.push_back(std::move(cb));
+    m_callbacks.push_back(std::move(callback));
   }
 
 private:
-  void _internal_callback(const CallbackContext &context,
+  void _internal_callback(const std::unique_ptr<Nan::Callback> &callback,
                           const spdlog::level::level_enum level,
                           const std::string &msg,
                           const spdlog::log_clock::time_point time) {
 
-    auto &[callback, isolate] = context;
+    LogWorker *worker = new LogWorker(callback.get(), level, msg, time);
 
-    v8::Locker locker(isolate);
-    {
-      v8::Isolate::Scope isolate_scope(isolate);
-      v8::HandleScope scope(isolate);
-
-      assert(v8::Isolate::GetCurrent() && "isolate is present");
-
-      printf("isolate %p\n", (void *)isolate);
-      printf("isolate_2 %p\n", (void *)(v8::Isolate::GetCurrent()));
-
-      // this is for for every logger and not once, to
-      // not have copy errors, or false shared JS values
-      std::vector<v8::Local<v8::Value>> arguments =
-          details::get_arguments(level, msg, time);
-
-      printf("after args\n");
-
-      Nan::Call(*callback, Nan::GetCurrentContext()->Global(), arguments.size(),
-                arguments.data());
-
-      printf("after call\n");
-    }
-
-    printf("after callback\n");
+    Nan::AsyncQueueWorker(worker);
   }
 
 protected:
   void sink_it_(const spdlog::details::log_msg &msg) override {
     printf("new  sink_it_\n");
-    spdlog::memory_buf_t formatted;
-    spdlog::sinks::base_sink<Mutex>::formatter_->format(msg, formatted);
-    auto string = fmt::to_string(formatted);
-    for (const auto &callback : m_callbacks) {
-      // WIP: this doesn't work correctly over multiple threads yet!
-      (void)callback;
-      // _internal_callback(*callback, msg.level, string, msg.time);
+    {
+
+      spdlog::memory_buf_t formatted;
+      spdlog::sinks::base_sink<Mutex>::formatter_->format(msg, formatted);
+      auto string = fmt::to_string(formatted);
+
+      printf("lockewr is locked %d - %p\n",
+             v8::Locker::IsLocked(this->m_isolate), (void *)this->m_isolate);
+
+      v8::Locker locker(this->m_isolate);
+      printf("after lock\n");
+      {
+        v8::Isolate::Scope isolate_scope(this->m_isolate);
+        v8::HandleScope scope(this->m_isolate);
+
+        for (const auto &callback : m_callbacks) {
+          this->_internal_callback(callback, msg.level, string, msg.time);
+        }
+      }
     }
     printf("after callback in logger\n");
   }

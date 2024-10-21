@@ -63,10 +63,18 @@ NAN_METHOD(start) {
 
   std::uint8_t playerCount = static_cast<std::atomic_uint8_t>(_playerCount);
 
+  auto isolate = v8::Isolate::GetCurrent();
+
+  printf("MAIN: lockewr is locked %d\n", v8::Locker::IsLocked(isolate));
+
   auto server = std::make_shared<Server>(port, playerCount);
+  printf("MAIN: lockewr is locked %d\n", v8::Locker::IsLocked(isolate));
+
+  printf("server start\n");
 
   info.GetReturnValue().Set(Nan::New<v8::External>(server.get()));
 
+  printf("MAIN: lockewr is locked %d\n", v8::Locker::IsLocked(isolate));
   printf("test here end\n");
 
   return;
@@ -136,9 +144,11 @@ NAN_MODULE_INIT(InitAll) {
 
   auto isolate = v8::Isolate::GetCurrent();
 
-  (void)isolate;
+  auto resource =
+      std::make_unique<Nan::AsyncResource>("internal_logger_callback");
 
-  auto sink = std::make_shared<logger::node_sink_mt>(/* isolate */);
+  auto sink =
+      std::make_shared<logger::node_sink_mt>(isolate, std::move(resource));
 
   auto console = std::make_shared<spdlog::sinks::stdout_sink_mt>();
 
@@ -162,6 +172,9 @@ NAN_MODULE_INIT(InitAll) {
   Nan::Set(target, Nan::New("register_logger").ToLocalChecked(),
            Nan::GetFunction(Nan::New<v8::FunctionTemplate>(register_logger))
                .ToLocalChecked());
+
+
+               
 }
 
 NODE_MODULE(ServerWrapper, InitAll)
