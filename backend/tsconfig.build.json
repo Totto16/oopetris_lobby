@@ -5,7 +5,8 @@
     "test",
     "dist",
     "**/*spec.ts",
-    "jest.config.ts"
+    "jest.config.ts",
+    "obpf"
   ],
   "compilerOptions": {
     "declaration": false,

@@ -4,8 +4,73 @@ import type { Lobby } from './entities/lobby.entity';
 import type { FireWall, RangeConfig } from '../config/schema';
 import * as os from 'node:os';
 import * as net from 'node:net';
+import * as ch from 'node:child_process';
 
 type NetError = Error & { code?: string };
+
+interface SubProcessHandle {
+    child_process: ch.ChildProcess;
+}
+
+export type ServerStatus = 'running' | 'error' | 'successful';
+
+export abstract class ServerHandle {
+    //TODO: add better methods and actually use them
+    abstract status(): ServerStatus;
+}
+
+export class SubProcessServer extends ServerHandle {
+    private __handle: SubProcessHandle;
+    private __data: {
+        stderr: string[];
+        stdout: string[];
+    };
+
+    constructor(handle: SubProcessHandle) {
+        super();
+        this.__handle = handle;
+        this.__data = { stderr: [], stdout: [] };
+
+        this.__handle.child_process.stdout?.on('data', (data) => {
+            this.__data.stdout.push(data.toString());
+        });
+
+        this.__handle.child_process.stderr?.on('data', (data) => {
+            this.__data.stderr.push(data.toString());
+        });
+    }
+
+    status(): ServerStatus {
+        const exitCode = this.__handle.child_process.exitCode;
+        if (exitCode === null) {
+            return 'running';
+        }
+
+        return exitCode === 0 ? 'successful' : 'error';
+    }
+
+    async startedCorrectly(): Promise<void> {
+        if (
+            this.__data.stderr.length !== 0 ||
+            this.__data.stdout.length !== 0
+        ) {
+            return;
+        }
+
+        return new Promise((resolve, reject) => {
+            this.__handle.child_process.stdout?.on('data', (_data) => {
+                resolve();
+            });
+
+            this.__handle.child_process.stderr?.on(
+                'data',
+                (data: Buffer | string) => {
+                    reject(new Error(data.toString()));
+                },
+            );
+        });
+    }
+}
 
 @Injectable()
 export class GameServerService {
@@ -168,7 +233,29 @@ export class GameServerService {
         return port;
     }
 
-    async start(_port: number, _playerCount: number): Promise<void> {
-        //TODO: either use the configServer or a builtin node module
+    private async startSubprocess(
+        port: number,
+        playerCount: number,
+    ): Promise<ServerHandle> {
+        const child_process = ch.spawn(
+            this.configService.config.environment.gameserver_executable,
+            [port.toString(), playerCount.toString()],
+            {
+                cwd: this.configService.config.environment.gamserver_cwd,
+                stdio: ['ignore', 'pipe', 'pipe'],
+            },
+        );
+
+        const handle: SubProcessHandle = { child_process };
+
+        const serverHandle = new SubProcessServer(handle);
+
+        await serverHandle.startedCorrectly();
+
+        return serverHandle;
+    }
+
+    async start(port: number, playerCount: number): Promise<ServerHandle> {
+        return this.startSubprocess(port, playerCount);
     }
 }

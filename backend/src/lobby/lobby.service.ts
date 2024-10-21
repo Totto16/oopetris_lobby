@@ -27,6 +27,7 @@ import { Prisma, type PrismaClient } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { LobbyStatus } from '@shared/lobby';
 import { UserRole } from '@shared/user';
+import type { ServerHandle } from './game.server.service';
 
 type PrismaImplClient = PrismaClient | Prisma.TransactionClient;
 
@@ -37,7 +38,7 @@ export type GameServerGetPort = () => Promise<number> | number;
 export type GameServerStart = (
     port: number,
     playerCount: number,
-) => Promise<void> | void;
+) => Promise<ServerHandle> | ServerHandle;
 
 export interface GameServerCallback {
     getPort: GameServerGetPort;
@@ -689,7 +690,8 @@ export class LobbyService {
                 },
             );
 
-            await gameServerCallback.start(port, playerCount);
+            //TODO: what to do with that handle
+            const _handle = await gameServerCallback.start(port, playerCount);
 
             return { port };
         } catch (err) {

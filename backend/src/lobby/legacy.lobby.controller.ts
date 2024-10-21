@@ -90,7 +90,7 @@ export class LegacyLobbyController {
                 return this.gameServerService.getPort();
             },
             start: async (port, playerCount) => {
-                await this.gameServerService.start(port, playerCount);
+                return this.gameServerService.start(port, playerCount);
             },
         });
     }
