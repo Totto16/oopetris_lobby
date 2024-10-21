@@ -1,5 +1,3 @@
 {
-    "jwt_secret": "test123456",
-    "simulator_library_path": "",
-    "gameserver_executable": ""
+    "jwt_secret": "test123456"
 }

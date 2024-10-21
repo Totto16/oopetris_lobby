@@ -24,7 +24,7 @@ import {
 import { LobbyService } from './lobby.service';
 import type { AuthenticatedRequest } from '../auth/auth.guard';
 import { sleep } from '../common/common';
-import type { GameServerService } from './game.server.service';
+import { GameServerService } from './game.server.service';
 
 @ApiTags()
 @Controller({ version: '1' })

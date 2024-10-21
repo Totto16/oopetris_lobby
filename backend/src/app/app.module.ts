@@ -11,9 +11,16 @@ import { UserModule } from '../user/user.module';
 import { globalProviders } from '../helpers';
 import { GlobalModule } from '../global/global.module';
 import { ConfigModule } from '../config/config.module';
+import { LobbyModule } from 'src/lobby/lobby.module';
 
 @Module({
-    imports: [GlobalModule, ConfigModule, PrismaModule, UserModule],
+    imports: [
+        GlobalModule,
+        ConfigModule,
+        PrismaModule,
+        UserModule,
+        LobbyModule,
+    ],
     providers: [AppService, ...globalProviders],
     controllers: [AppController, AppControllerV1, AppControllerV2],
 })

@@ -15,14 +15,11 @@ import { VersionResponse, type APIFeatures } from '@shared/genral';
 import { commit as compatibilityCommit } from '../compatibility';
 import { commit as currentCommit } from '../generated/commit';
 import { currentVersion } from '../common/common';
-import type { ConfigService } from 'src/config/config.service';
+
 @ApiTags('general')
 @Controller({ version: VERSION_NEUTRAL })
 export class AppController {
-    constructor(
-        private readonly appService: AppService,
-        private readonly configService: ConfigService,
-    ) {}
+    constructor(private readonly appService: AppService) {}
 
     @Public()
     @HttpCode(HttpStatus.OK)

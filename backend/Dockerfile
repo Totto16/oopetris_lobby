@@ -51,6 +51,8 @@ ENV NODE_ENV=production
 COPY prisma/ /tmp/prisma/
 COPY src/ /tmp/src/
 
+ARG OOPETRIS_LOBBY_COMMIT_HASH=""
+
 RUN pnpm run generate:types && \
     sed -i "s/XXX_HASH_XXX/${OOPETRIS_LOBBY_COMMIT_HASH:-<Unknown Commit Hash>}/" src/generated/commit.ts && \
     pnpm run build:prod
