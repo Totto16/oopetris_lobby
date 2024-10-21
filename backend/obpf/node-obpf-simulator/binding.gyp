@@ -8,6 +8,7 @@
                 "-Wall",
                 "-Wextra",
                 "-Wno-unused-parameter",
+                "-Wno-unused-function",
                 "-O3",
                 "-Werror",
                 "-Wpedantic",

@@ -18,6 +18,8 @@
 #include "./logger.hpp"
 #include <server/server.hpp>
 
+#include <spdlog/sinks/stdout_sinks.h>
+
 NAN_METHOD(start) {
 
   if (info.Length() != 2) {
@@ -64,6 +66,9 @@ NAN_METHOD(start) {
   auto server = std::make_shared<Server>(port, playerCount);
 
   info.GetReturnValue().Set(Nan::New<v8::External>(server.get()));
+
+  printf("test here end\n");
+
   return;
 }
 
@@ -88,55 +93,6 @@ NAN_METHOD(stop) {
   return;
 }
 
-static v8::Local<v8::Value>
-get_js_level(const spdlog::level::level_enum level) {
-
-  switch (level) {
-  case spdlog::level::level_enum::trace:
-    return Nan::New("trace").ToLocalChecked();
-  case spdlog::level::level_enum::debug:
-    return Nan::New("debug").ToLocalChecked();
-  case spdlog::level::level_enum::info:
-    return Nan::New("info").ToLocalChecked();
-  case spdlog::level::level_enum::warn:
-    return Nan::New("warn").ToLocalChecked();
-  case spdlog::level::level_enum::err:
-    return Nan::New("err").ToLocalChecked();
-  case spdlog::level::level_enum::critical:
-    return Nan::New("critical").ToLocalChecked();
-  case spdlog::level::level_enum::off:
-    return Nan::New("off").ToLocalChecked();
-  default:
-    return Nan::Undefined();
-  }
-}
-
-static std::vector<v8::Local<v8::Value>>
-get_arguments(const spdlog::level::level_enum level, const std::string &msg,
-              const spdlog::log_clock::time_point time) {
-
-  std::vector<v8::Local<v8::Value>> result{};
-
-  auto level_js = get_js_level(level);
-
-  result.push_back(level_js);
-
-  result.push_back(Nan::New<v8::String>(msg).ToLocalChecked());
-
-  std::uint64_t milliseconds_since_epoch =
-      std::chrono::duration_cast<std::chrono::milliseconds>(
-          time.time_since_epoch())
-          .count();
-
-  auto time_js =
-      Nan::New<v8::Date>(static_cast<double>(milliseconds_since_epoch))
-          .ToLocalChecked();
-
-  result.push_back(time_js);
-
-  return result;
-}
-
 NAN_METHOD(register_logger) {
 
   if (info.Length() != 1) {
@@ -151,35 +107,49 @@ NAN_METHOD(register_logger) {
     return;
   }
 
-  auto callback = info[0].As<v8::Function>();
+  printf("TEST 1\n");
+
+  auto callback = std::make_unique<Nan::Callback>(info[0].As<v8::Function>());
+
+  printf("TEST 2\n");
 
   auto &sinks = spdlog::get("node_logger")->sinks();
 
-  assert(sinks.size() == 1);
+  printf("TEST sinks %zu\n", sinks.size());
 
-  reinterpret_cast<logger::node_sink_mt *>(sinks.at(0).get())
-      ->add([callback](const spdlog::level::level_enum level,
-                       const std::string &msg,
-                       const spdlog::log_clock::time_point time) {
-        // this is for for every logger and not once, to not have copy errors,
-        // or false shared JS values
-        std::vector<v8::Local<v8::Value>> arguments =
-            get_arguments(level, msg, time);
+  assert(sinks.size() >= 1 && "sink size is a s expected");
 
-        Nan::Call(callback, Nan::GetCurrentContext()->Global(),
-                  arguments.size(), arguments.data());
-      });
+  auto logger = reinterpret_cast<logger::node_sink_mt *>(sinks.at(0).get());
+
+  printf("TEST logger %p\n", static_cast<void *>(logger));
+
+  auto isolate = v8::Isolate::GetCurrent();
+
+  logger->add(std::move(callback), isolate);
+
+  printf("TEST logger  after end\n");
 
   return;
 }
 
 NAN_MODULE_INIT(InitAll) {
 
-  auto sink = std::make_shared<logger::node_sink_mt>();
+  auto isolate = v8::Isolate::GetCurrent();
 
-  auto node_logger = std::make_shared<spdlog::logger>("node_logger", sink);
+  (void)isolate;
+
+  auto sink = std::make_shared<logger::node_sink_mt>(/* isolate */);
+
+  auto console = std::make_shared<spdlog::sinks::stdout_sink_mt>();
+
+  std::vector<spdlog::sink_ptr> sinks{sink, console};
+
+  auto node_logger =
+      std::make_shared<spdlog::logger>("node_logger", begin(sinks), end(sinks));
 
   spdlog::set_default_logger(node_logger);
+
+  spdlog::set_level(spdlog::level::trace);
 
   Nan::Set(
       target, Nan::New("stop").ToLocalChecked(),
