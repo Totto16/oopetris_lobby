@@ -21,7 +21,7 @@
             "defines": ["V8_DEPRECATION_WARNINGS=1"],
             "sources": [
                 "src/cpp/wrapper.cpp",
-                "src/cpp/logger.cpp",
+                "src/cpp/worker.cpp",
                 "../simulator/src/server/server.cpp",
             ],
             "include_dirs": [

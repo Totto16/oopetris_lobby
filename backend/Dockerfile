@@ -1,3 +1,29 @@
+FROM ubuntu:24.04 as cpp-buildenv
+
+WORKDIR /tmp
+
+RUN wget https://apt.llvm.org/llvm.sh && \
+    chmod +x llvm.sh && \
+    ./llvm.sh 19 && \
+    rm -rf /var/lib/apt/lists/*    
+
+ENV CC=clang-19
+ENV CXX=clang++-19
+ENV LD=clang-19
+
+
+COPY obpf/simulator/ simulator/
+
+RUN cd simulator && \
+    cmake -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -Dobpf_build_tests=OFF -Dobpf_simulator_enable_undefined_behavior_sanitizer=OFF -Dobpf_simulator_enable_address_sanitizer=OFF -Dobpf_simulator_warnings_as_errors=ON -Dobpf_simulator_build_shared_libs=OFF 
+
+COPY obpf/node-obpf-simulator/ node-obpf-simulator/
+
+RUn cd node-obpf-simulator && \
+    
+
+
+
 FROM node:20.18.0 AS build-env
 
 WORKDIR /tmp
