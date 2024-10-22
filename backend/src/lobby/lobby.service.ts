@@ -45,6 +45,24 @@ export interface GameServerCallback {
     start: GameServerStart;
 }
 
+function transactionError(err: any): never {
+    if (err instanceof PrismaClientKnownRequestError) {
+        throw new InternalServerErrorException(err.message);
+    }
+
+    if (err instanceof HttpException) {
+        throw err;
+    }
+
+    if (err instanceof Error) {
+        throw new InternalServerErrorException(err.message);
+    }
+
+    throw new InternalServerErrorException(
+        `An unknown error occurred, while trying to execute a transaction`,
+    );
+}
+
 @Injectable()
 export class LobbyService {
     constructor(private readonly prisma: PrismaService) {}
@@ -191,17 +209,7 @@ export class LobbyService {
 
             return result;
         } catch (err) {
-            if (err instanceof PrismaClientKnownRequestError) {
-                throw new InternalServerErrorException(err.message);
-            }
-
-            if (err instanceof Error) {
-                throw new InternalServerErrorException(err.message);
-            }
-
-            throw new InternalServerErrorException(
-                `An unknown error occurred, while trying to read the database`,
-            );
+            transactionError(err);
         }
     }
 
@@ -309,11 +317,9 @@ export class LobbyService {
 
                     return this.joinIfPossibleImpl(user, lobby_id, retries + 1);
                 }
-
-                throw new InternalServerErrorException(err.message);
             }
 
-            throw err;
+            transactionError(err);
         }
     }
 
@@ -389,17 +395,7 @@ export class LobbyService {
 
             return result;
         } catch (err) {
-            if (err instanceof PrismaClientKnownRequestError) {
-                throw new InternalServerErrorException(err.message);
-            }
-
-            if (err instanceof Error) {
-                throw new InternalServerErrorException(err.message);
-            }
-
-            throw new InternalServerErrorException(
-                `An unknown error occurred, while trying to read the database`,
-            );
+            transactionError(err);
         }
     }
 
@@ -444,17 +440,7 @@ export class LobbyService {
                 },
             );
         } catch (err) {
-            if (err instanceof PrismaClientKnownRequestError) {
-                throw new InternalServerErrorException(err.message);
-            }
-
-            if (err instanceof Error) {
-                throw new InternalServerErrorException(err.message);
-            }
-
-            throw new InternalServerErrorException(
-                `An unknown error occurred, while trying to read the database`,
-            );
+            transactionError(err);
         }
     }
 
@@ -528,17 +514,7 @@ export class LobbyService {
                 },
             );
         } catch (err) {
-            if (err instanceof PrismaClientKnownRequestError) {
-                throw new InternalServerErrorException(err.message);
-            }
-
-            if (err instanceof Error) {
-                throw new InternalServerErrorException(err.message);
-            }
-
-            throw new InternalServerErrorException(
-                `An unknown error occurred, while trying to read the database`,
-            );
+            transactionError(err);
         }
     }
 
@@ -610,17 +586,7 @@ export class LobbyService {
                 },
             );
         } catch (err) {
-            if (err instanceof PrismaClientKnownRequestError) {
-                throw new InternalServerErrorException(err.message);
-            }
-
-            if (err instanceof Error) {
-                throw new InternalServerErrorException(err.message);
-            }
-
-            throw new InternalServerErrorException(
-                `An unknown error occurred, while trying to read the database`,
-            );
+            transactionError(err);
         }
     }
 
@@ -695,17 +661,7 @@ export class LobbyService {
 
             return { port };
         } catch (err) {
-            if (err instanceof PrismaClientKnownRequestError) {
-                throw new InternalServerErrorException(err.message);
-            }
-
-            if (err instanceof Error) {
-                throw new InternalServerErrorException(err.message);
-            }
-
-            throw new InternalServerErrorException(
-                `An unknown error occurred, while trying to read the database`,
-            );
+            transactionError(err);
         }
     }
 
@@ -744,17 +700,7 @@ export class LobbyService {
 
             return { id: new_lobby.id };
         } catch (err) {
-            if (err instanceof PrismaClientKnownRequestError) {
-                throw new InternalServerErrorException(err.message);
-            }
-
-            if (err instanceof Error) {
-                throw new InternalServerErrorException(err.message);
-            }
-
-            throw new InternalServerErrorException(
-                `An unknown error occurred, while trying to read the database`,
-            );
+            transactionError(err);
         }
     }
 
@@ -821,17 +767,7 @@ export class LobbyService {
                 },
             );
         } catch (err) {
-            if (err instanceof PrismaClientKnownRequestError) {
-                throw new InternalServerErrorException(err.message);
-            }
-
-            if (err instanceof Error) {
-                throw new InternalServerErrorException(err.message);
-            }
-
-            throw new InternalServerErrorException(
-                `An unknown error occurred, while trying to read the database`,
-            );
+            transactionError(err);
         }
     }
 
