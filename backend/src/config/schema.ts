@@ -22,7 +22,7 @@ const rangeConfig = z
         end: z.number().positive().int().lt(uint16_t_max),
     })
     .strict()
-    .refine((data) => data.start >= data.end, {
+    .refine((data) => data.start < data.end, {
         message: '"start < end" has to be true',
         path: ['end'],
     });
