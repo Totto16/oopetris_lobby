@@ -1,3 +1,11 @@
 {
-    "jwt_secret": "<YOUR SECRET HERE>"
+    "jwt_secret": "<YOUR SECRET HERE>",
+    "portConfig": {
+        "mode": "inRange",
+        "config": {
+            "start": 64000,
+            "end": 64500
+        },
+        "firewall": "none"
+    }
 }

@@ -45,6 +45,7 @@ services:
           - backend
     ports:
       - 7654:3000
+      - 64000-64500:64000-64500
 
 networks:
   main:

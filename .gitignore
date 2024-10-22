@@ -2,3 +2,4 @@
 .env
 backend_config.json
 /database/
+deploy.sh
