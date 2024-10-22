@@ -1,22 +1,15 @@
-FROM debian:bookworm AS cpp-buildenv
+FROM alpine:3.20 AS cpp-buildenv
 
 WORKDIR /tmp
 
-RUN apt-get update && \
-    apt-get install --no-install-recommends wget ca-certificates \
-    lsb-release software-properties-common gnupg ninja-build \
-    git libssl-dev openssl pkg-config -y && \
-    wget https://apt.llvm.org/llvm.sh && \
-    chmod +x llvm.sh && \
-    ./llvm.sh 19 && \
-    echo "deb http://deb.debian.org/debian bookworm-backports main" > /etc/apt/sources.list.d/new.list && \
-    apt-get update && \
-    apt-get install --no-install-recommends cmake=3.30.5-1~bpo12+1 cmake-data=3.30.5-1~bpo12+1 clang-tools-19 -y && \
-    rm -rf /var/lib/apt/lists/* 
+RUN apk update --no-cache && \
+    apk add --no-cache ca-certificates \
+    samurai git openssl-dev openssl pkgconf cmake \
+    clang18 clang18-extra-tools
 
-ENV CC=clang-19
-ENV CXX=clang++-19
-ENV LD=clang-19
+ENV CC=clang-18
+ENV CXX=clang++-18
+ENV LD=clang-18
 
 COPY obpf/simulator/ simulator/
 
@@ -32,7 +25,7 @@ RUN cmake -B build -G "Ninja" \
     cmake --build build
 
 
-FROM node:20.18.0 AS build-env
+FROM node:20.18.0-alpine AS build-env
 
 WORKDIR /tmp
 
@@ -60,7 +53,7 @@ RUN pnpm run generate:types && \
 
 # final image starts here
 
-FROM node:20.18.0
+FROM node:20.18.0-alpine
 
 ENV NODE_ENV=production
 
