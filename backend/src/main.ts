@@ -14,6 +14,27 @@ import {
 import { AppService } from './app/app.service';
 import { currentVersion } from './common/common';
 import { ConfigModule } from './config/config.module';
+import { PrismaService } from './prisma/prisma.service';
+import { Prisma } from '@prisma/client';
+
+/**
+ * @description cleanup old Lobbies, this deletes all lobbies and associated lobby players, this is done on startup, so that everything is consistent
+ * @param prismaService
+ */
+async function cleanupLobbies(prismaService: PrismaService): Promise<void> {
+    await prismaService.$transaction(
+        async (transactionClient) => {
+            // delete ALL lobbies
+            await transactionClient.lobby.deleteMany({});
+
+            // delete ALL lobby players
+            await transactionClient.lobbyPlayer.deleteMany({});
+        },
+        {
+            isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+        },
+    );
+}
 
 async function bootstrap(): Promise<void> {
     let loggerSettings: LogLevel[] | undefined = undefined;
@@ -62,6 +83,9 @@ async function bootstrap(): Promise<void> {
     app.enableShutdownHooks();
 
     app.get<AppService>(AppService).subscribeToShutdown(() => app.close());
+
+    const prismaService = app.get<PrismaService>(PrismaService);
+    await cleanupLobbies(prismaService);
 
     try {
         await app.listen(port);
