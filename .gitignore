@@ -3,3 +3,4 @@
 backend_config.json
 /database/
 deploy.sh
+/node_modules/
