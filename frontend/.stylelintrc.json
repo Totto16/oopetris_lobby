@@ -1,0 +1,40 @@
+{
+  "extends": "stylelint-config-standard-scss",
+  "rules": {
+    "scss/load-partial-extension": "always",
+    "declaration-empty-line-before": null,
+    "value-no-vendor-prefix": [
+      true,
+      {
+        "ignoreValues": [
+          "/^(-webkit-|-moz-)?sticky$/",
+          "/^(-webkit-|-moz-|-ms-)?user-select$/",
+          "/^(-webkit-|-moz-|-ms-)?appearance$/"
+        ]
+      }
+    ],
+    "property-no-vendor-prefix": [
+      true,
+      {
+        "ignoreProperties": [
+          "/^(-webkit-|-moz-)?sticky$/",
+          "/^(-webkit-|-moz-|-ms-)?user-select$/",
+          "/^(-webkit-|-moz-|-ms-)?appearance$/"
+        ]
+      }
+    ],
+    "no-descending-specificity": null,
+    "color-function-notation": "legacy",
+    "import-notation": "url",
+    "color-hex-length": "long",
+    "scss/comment-no-empty": null
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/styles.scss"
+      ],
+      "rules": {}
+    }
+  ]
+}

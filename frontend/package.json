@@ -1,14 +1,19 @@
 {
   "name": "oopetris-lobby-frontend",
   "version": "0.0.1",
+  "description": "The oopetris lobby frontend",
+  "private": true,
+  "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "lint:lockfile": "pnpm dedupe --check",
+    "perform-audit": "audit-ci --config ./audit-ci.jsonc",
+    "lint:style": "stylelint --color 'src/**/*.scss'"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "^18.2.0",
     "@angular/common": "^18.2.0",
@@ -27,6 +32,7 @@
     "@angular/cli": "^18.2.10",
     "@angular/compiler-cli": "^18.2.0",
     "@types/jasmine": "~5.1.0",
+    "audit-ci": "^7.1.0",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
@@ -34,5 +40,9 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.5.2"
+  },
+  "packageManager": "pnpm@9.12.2",
+  "engines": {
+    "node": "20.18.0"
   }
 }
