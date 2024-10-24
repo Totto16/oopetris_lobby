@@ -12,7 +12,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { NgxLoadingButtonsModule } from 'ngx-loading-button';
+import { NgxLoadingButtonsModule } from 'ngx-loading-buttons';
 
 @NgModule({
     imports: [

@@ -35,7 +35,7 @@
               }
             ],
             "styles": [
-              "ngx-loading-buttons/src/styles.css",
+              "ngx-loading-buttons/styles.css",
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
             ],
@@ -99,7 +99,7 @@
               }
             ],
             "styles": [
-              "ngx-loading-buttons/src/styles.css",
+              "ngx-loading-buttons/styles.css",
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
             ],
