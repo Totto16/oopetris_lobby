@@ -168,8 +168,8 @@ importers:
         specifier: workspace:../shared
         version: link:../shared
       ngx-loading-buttons:
-        specifier: ^18.0.2
-        version: 18.0.2(@angular/cdk@18.2.10(@angular/common@18.2.9(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/common@18.2.9(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10))
+        specifier: ^18.0.1
+        version: 18.0.1(@angular/cdk@18.2.10(@angular/common@18.2.9(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/common@18.2.9(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10))
       rxjs:
         specifier: ~7.8.0
         version: 7.8.1
@@ -4643,8 +4643,8 @@ packages:
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
 
-  ngx-loading-buttons@18.0.2:
-    resolution: {integrity: sha512-wYE5eh2mXAMmHMi84rg0IgpRjgfaQCJ7eyosTdOGfLKQb6eiD7OeDnZEdoQWVvgmtMvbfCQZGbeJTS3diVtjzw==}
+  ngx-loading-buttons@18.0.1:
+    resolution: {integrity: sha512-0DSxIFEZ9JGu0wcXoXSmstDTOz7MSFUeAZV8z2O4v9PFwd/z53wBAHIG68yDkVR2LT5qXhC+zEhIRl97IRMjcw==}
     peerDependencies:
       '@angular/cdk': ^18.0.0
       '@angular/common': ^18.0.0
@@ -11433,7 +11433,7 @@ snapshots:
 
   neo-async@2.6.2: {}
 
-  ngx-loading-buttons@18.0.2(@angular/cdk@18.2.10(@angular/common@18.2.9(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/common@18.2.9(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10)):
+  ngx-loading-buttons@18.0.1(@angular/cdk@18.2.10(@angular/common@18.2.9(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/common@18.2.9(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10)):
     dependencies:
       '@angular/cdk': 18.2.10(@angular/common@18.2.9(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1)
       '@angular/common': 18.2.9(@angular/core@18.2.9(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1)
