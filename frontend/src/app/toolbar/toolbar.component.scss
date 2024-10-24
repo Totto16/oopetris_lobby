@@ -1,0 +1,23 @@
+.toolbar-icon {
+    padding: 0 0px;
+    font-size: calc(var(--icon-size) * 1.6);
+    height: calc(var(--icon-size) * 1.6);
+    width: calc(var(--icon-size) * 1.6);
+    cursor: pointer;
+}
+
+.toolbar-spacer {
+    flex: 1 1 auto;
+}
+
+.toolbar-icon-container {
+    font-size: var(--icon-size);
+    width: calc(var(--icon-size) * 2);
+    height: calc(var(--icon-size) * 2);
+}
+
+.toolbar-icon-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

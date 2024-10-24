@@ -1,0 +1,16 @@
+<div class="error-snackbar-root">
+  <div class="close-snackbar-error" (click)="close()">
+    <button mat-icon-button matTooltip="close" matTooltipPosition="above">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="title">
+    {{data.error.type}}
+  </div>
+  <div class="content">
+    {{data.error.message}}
+  </div>
+  <div class="snackbar-progress-bar">
+    <mat-progress-bar mode="determinate" [value]="timeoutProgress"></mat-progress-bar>
+  </div>
+</div>

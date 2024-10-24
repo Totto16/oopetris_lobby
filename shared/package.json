@@ -14,18 +14,30 @@
   "main": "./dist/index.js",
   "types": "./dist/index.ts",
   "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
     "./user": {
+      "import": "./src/user/index.ts",
       "default": "./dist/user/index.js",
       "types": "./dist/user/index.d.ts"
     },
     "./user/constants": {
-      "import": "./src/user/constants.ts"
+      "import": "./src/user/constants.ts",
+      "default": "./dist/user/constants.js",
+      "types": "./dist/user/constants.d.ts"
     },
     "./lobby": {
-      "import": "./src/lobby/index.ts"
+      "import": "./src/lobby/index.ts",
+      "default": "./dist/lobby/index.js",
+      "types": "./dist/lobby/index.d.ts"
     },
     "./general": {
-      "import": "./src/general.ts"
+      "import": "./src/general.ts",
+      "default": "./dist/general.js",
+      "types": "./dist/general.d.ts"
     }
   },
   "devDependencies": {

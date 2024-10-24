@@ -1,0 +1,52 @@
+<div class="center-horizontally-container" id="register-shake-container">
+  <form class="register-form-container" [formGroup]="form">
+    <mat-form-field>
+      <mat-label>Username</mat-label>
+      <input matInput #username type="text" formControlName="username" placeholder="Enter username" required>
+      <ng-template ngFor let-validator [ngForOf]="validators['username']" ngProjectAs="mat-error">
+        <mat-error *ngIf="validator.hasError.call(this)">
+          {{validator.error}}
+        </mat-error>
+      </ng-template>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input matInput #password [type]="hide ? 'password' : 'text'" formControlName="password" required
+        placeholder="Enter password">
+      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <ng-template ngFor let-validator [ngForOf]="validators['password']" ngProjectAs="mat-error">
+        <mat-error *ngIf="validator.hasError.call(this)">
+          {{validator.error}}
+        </mat-error>
+      </ng-template>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Repeat password</mat-label>
+      <input matInput #passwordConfirm [type]="hide ? 'password' : 'text'" formControlName="passwordConfirm" required
+        placeholder="Confirm password">
+      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <ng-template ngFor let-validator [ngForOf]="validators['passwordConfirm']" ngProjectAs="mat-error">
+        <mat-error *ngIf="validator.hasError.call(this)">
+          {{validator.error}}
+        </mat-error>
+      </ng-template>
+    </mat-form-field>
+
+    <div class="register-buttons-div">
+      <button id="spinnerWithoutText" mat-raised-button color="primary" [mtBasicSpinner]="loading" [hideText]="true"
+        [disabled]="loading" (click)="onSubmit()">
+        Register
+      </button>
+      <a mat-flat-button routerLink="/login">Login</a>
+    </div>
+  </form>
+
+</div>

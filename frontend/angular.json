@@ -35,6 +35,8 @@
               }
             ],
             "styles": [
+              "ngx-loading-buttons/src/styles.css",
+              "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -73,7 +75,10 @@
               "buildTarget": "oopetris-lobby-frontend:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
@@ -94,6 +99,8 @@
               }
             ],
             "styles": [
+              "ngx-loading-buttons/src/styles.css",
+              "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
             ],
             "scripts": []

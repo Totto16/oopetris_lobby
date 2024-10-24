@@ -22,7 +22,30 @@
     "lib": [
       "ES2022",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@services/account": [
+        "./src/services/account.service"
+      ],
+      "@services/item": [
+        "./src/services/item.service"
+      ],
+      "@helpers/entities": [
+        "./src/helpers/entities"
+      ],
+      "@helpers/constants": [
+        "./src/helpers/constants"
+      ],
+      "@helpers/validators": [
+        "./src/helpers/validators"
+      ],
+      "@helpers/general": [
+        "./src/helpers/general"
+      ],
+      "@dialogs/error": [
+        "./src/app/lobbies/dialogs/error/error.component"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
