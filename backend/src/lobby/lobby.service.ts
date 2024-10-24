@@ -25,8 +25,7 @@ import type {
 import type { User } from '../user/entities/user.entity';
 import { Prisma, type PrismaClient } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { LobbyStatus } from '@shared/lobby';
-import { UserRole } from '@shared/user';
+import { LobbyStatus, UserRole } from '@oopetris_lobby/shared';
 import type { ServerHandle } from './game.server.service';
 
 type PrismaImplClient = PrismaClient | Prisma.TransactionClient;

@@ -7,7 +7,11 @@ import {
     MinLength,
     ValidateIf,
 } from 'class-validator';
-import { UserRole, UserSignUpBase, userConstants } from '@shared/user';
+import {
+    UserRole,
+    UserSignUpBase,
+    userConstants,
+} from '@oopetris_lobby/shared';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import {
     IsNotBcryptEncrypted,

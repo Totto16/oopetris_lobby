@@ -1,5 +1,5 @@
 import { CustomDecorator, SetMetadata } from '@nestjs/common';
-import { UserRole } from '@shared/user';
+import { UserRole } from '@oopetris_lobby/shared';
 
 export const ROLES_KEY = Symbol('rolesKey');
 export const OnlyAllowRoles = (

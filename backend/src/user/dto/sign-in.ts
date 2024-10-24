@@ -1,6 +1,6 @@
 import { IsDefined, IsString, MaxLength, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserSignInBase, userConstants } from '@shared/user';
+import { UserSignInBase, userConstants } from '@oopetris_lobby/shared';
 
 export class SignInDto implements UserSignInBase {
     @ApiProperty({

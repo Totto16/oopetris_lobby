@@ -9,7 +9,7 @@ import { Request } from 'express';
 import { getUserId, JWTContent } from './auth.service';
 import { IS_PUBLIC_KEY } from '@decorators/all';
 import { Reflector } from '@nestjs/core';
-import type { UserBase } from '@shared/user';
+import type { UserBase } from '@oopetris_lobby/shared';
 import { ConfigService } from '../config/config.service';
 import { UserService } from '../user/user.service';
 

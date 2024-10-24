@@ -3,7 +3,7 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { SignInDto } from '../user/dto/sign-in';
-import type { JWTResponse } from '@shared/user';
+import type { JWTResponse } from '@oopetris_lobby/shared';
 import type { JwtPayload, LoginResponse } from '../compatibility';
 interface JWTContentV2 {
     id: string;

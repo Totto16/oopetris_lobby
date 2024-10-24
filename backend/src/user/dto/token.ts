@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import type { JWTResponse } from '@shared/user';
+import type { JWTResponse } from '@oopetris_lobby/shared';
 import { IsString } from 'class-validator';
 
 export class JWTResponseDTO implements JWTResponse {

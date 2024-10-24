@@ -5,7 +5,7 @@ import { AuthService } from '../auth/auth.service';
 import { User } from './entities/user.entity';
 import { compareSync } from 'bcrypt';
 import { isUUID } from 'class-validator';
-import { UserRole } from '@shared/user';
+import { UserRole } from '@oopetris_lobby/shared';
 import { ConfigService } from '../config/config.service';
 import { ConfigModule } from '../config/config.module';
 import { AppModule } from '../app/app.module';

@@ -16,7 +16,6 @@ import { currentVersion } from './common/common';
 import { ConfigModule } from './config/config.module';
 import { PrismaService } from './prisma/prisma.service';
 import { Prisma } from '@prisma/client';
-
 /**
  * @description cleanup old Lobbies, this deletes all lobbies and associated lobby players, this is done on startup, so that everything is consistent
  * @param prismaService

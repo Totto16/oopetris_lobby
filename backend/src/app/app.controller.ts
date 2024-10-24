@@ -11,7 +11,7 @@ import { AppService, HealthCheck, type ServerInfo } from './app.service';
 import { ApiTags } from '@nestjs/swagger';
 import { AdminOnly, Public } from '@decorators/all';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { VersionResponse, type APIFeatures } from '@shared/genral';
+import { VersionResponse, type APIFeatures } from '@oopetris_lobby/shared';
 import { commit as compatibilityCommit } from '../compatibility';
 import { commit as currentCommit } from '../generated/commit';
 import { currentVersion } from '../common/common';

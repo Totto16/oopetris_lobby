@@ -1,0 +1,12 @@
+{
+  "name": "oopetris-lobby-project",
+  "version": "0.0.1",
+  "description": "The oopetris lobby project",
+  "private": true,
+  "license": "MIT",
+  "scripts": {},
+  "packageManager": "pnpm@9.12.2",
+  "engines": {
+    "node": "20.18.0"
+  }
+}

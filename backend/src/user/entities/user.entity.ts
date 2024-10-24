@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { User as UserType } from '@prisma/client';
-import { UserRole, UserBase, userConstants } from '@shared/user';
+import { UserRole, UserBase, userConstants } from '@oopetris_lobby/shared';
+
+export { LobbyStatus } from '@prisma/client';
 
 export class User implements UserType, UserBase {
     @ApiProperty({

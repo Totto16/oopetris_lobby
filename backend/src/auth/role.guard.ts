@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import type { AuthenticatedRequest } from './auth.guard';
 import { ROLES_KEY } from '@decorators/all';
-import { UserRole } from '@shared/user';
+import { UserRole } from '@oopetris_lobby/shared';
 
 @Injectable()
 export class RoleGuard implements CanActivate {

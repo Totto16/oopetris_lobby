@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { LobbyPlayer as LobbyPlayerType } from '@prisma/client';
-import { LobbyPlayerBase } from '@shared/lobby';
+import { LobbyPlayerBase } from '@oopetris_lobby/shared';
 
 export class LobbyPlayer implements LobbyPlayerType, LobbyPlayerBase {
     @ApiProperty({

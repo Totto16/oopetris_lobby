@@ -1,6 +1,12 @@
-import { UserRole } from '@prisma/client';
-export { UserRole } from '@prisma/client';
 export { constants as userConstants } from './constants';
+
+export const UserRole = {
+    User: 'User',
+    Admin: 'Admin',
+} as const;
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole];
+
 export interface UserBase {
     id: string;
     username: string;

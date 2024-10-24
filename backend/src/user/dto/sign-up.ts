@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { Match } from '@decorators/all';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserSignUpBase, userConstants } from '@shared/user';
+import { UserSignUpBase, userConstants } from '@oopetris_lobby/shared';
 
 export class SignUpDto implements UserSignUpBase {
     @ApiProperty({

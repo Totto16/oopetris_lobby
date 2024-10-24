@@ -8,14 +8,13 @@ import * as request from 'supertest';
 import { isUUID, validate } from 'class-validator';
 import { User } from './entities/user.entity';
 import { compareSync } from 'bcrypt';
-import type { JWTResponse } from '@shared/user';
+import { type JWTResponse, UserRole } from '@oopetris_lobby/shared';
 import { Server } from 'net';
-import { sleep } from '../test/helpers';
-import { UserRole } from '@shared/user';
 import { randomUUID } from 'crypto';
 import { ConfigService } from '../config/config.service';
 import { ConfigModule } from '../config/config.module';
 import { AppModule } from '../app/app.module';
+import { sleep } from '../common/common';
 
 const USERNAME = 'testController4';
 const PASSWORD = 'f67F86n9gf97oidvl%%';

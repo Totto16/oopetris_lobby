@@ -23,16 +23,5 @@
     "strictFunctionTypes": true,
     "alwaysStrict": true,
     "strictPropertyInitialization": true,
-    "paths": {
-      "@decorators/all": [
-        "src/decorators"
-      ],
-    }
-  },
-  "ts-node": {
-    "compilerOptions": {
-      "module": "CommonJS"
-    },
-    "files": true
   }
 }

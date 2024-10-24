@@ -1,5 +1,11 @@
-import { LobbyStatus } from '@prisma/client';
-export { LobbyStatus } from '@prisma/client';
+export const LobbyStatus = {
+    Open: 'Open',
+    Closed: 'Closed',
+    Running: 'Running',
+    Finished: 'Finished',
+} as const;
+
+export type LobbyStatus = (typeof LobbyStatus)[keyof typeof LobbyStatus];
 
 export interface LobbyBase {
     id: string;
