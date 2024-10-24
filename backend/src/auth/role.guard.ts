@@ -3,6 +3,7 @@ import {
     CanActivate,
     ExecutionContext,
     UnauthorizedException,
+    HttpException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { AuthenticatedRequest } from './auth.guard';
@@ -36,7 +37,17 @@ export class RoleGuard implements CanActivate {
             throw new UnauthorizedException(
                 `Not allowed for role '${request.user.user.role}'`,
             );
-        } catch {
+        } catch (err) {
+            if (err instanceof HttpException) {
+                throw err;
+            }
+
+            if (err instanceof Error) {
+                throw new UnauthorizedException(
+                    `Authorization error: ${err.message}`,
+                );
+            }
+
             throw new UnauthorizedException('Unknown authorization error');
         }
     }

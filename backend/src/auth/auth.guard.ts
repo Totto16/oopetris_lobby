@@ -1,6 +1,7 @@
 import {
     CanActivate,
     ExecutionContext,
+    HttpException,
     Injectable,
     UnauthorizedException,
 } from '@nestjs/common';
@@ -88,7 +89,17 @@ export class AuthGuard implements CanActivate {
             request.user = result;
             request.authenticated = true;
             return true;
-        } catch {
+        } catch (err) {
+            if (err instanceof HttpException) {
+                throw err;
+            }
+
+            if (err instanceof Error) {
+                throw new UnauthorizedException(
+                    `Authorization error: ${err.message}`,
+                );
+            }
+
             throw new UnauthorizedException('Unknown authorization error');
         }
     }
