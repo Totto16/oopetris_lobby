@@ -25,7 +25,8 @@ services:
   backend:
     container_name: oopetris-lobby-backend
     build:
-      context: ./backend/
+      context: .
+      dockerfile: Dockerfiles/backend
       platforms:
         - "linux/amd64"
         - "linux/arm64/v8"

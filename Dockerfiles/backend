@@ -11,7 +11,7 @@ ENV CC=clang-18
 ENV CXX=clang++-18
 ENV LD=clang-18
 
-COPY obpf/simulator/ simulator/
+COPY backend/obpf/simulator/ simulator/
 
 WORKDIR /tmp/simulator/
 
@@ -27,22 +27,29 @@ RUN cmake -B build -G "Ninja" \
 
 FROM node:20.18.0-alpine AS build-env
 
-WORKDIR /tmp
-
 # install node development dependencies
+COPY .npmrc package.json pnpm-lock.yaml pnpm-workspace.yaml /tmp/
 
-COPY .npmrc package.json pnpm-lock.yaml nest-cli.json tsconfig.json tsconfig.build.json /tmp/
+COPY backend/.npmrc backend/package.json backend/pnpm-lock.yaml backend/nest-cli.json backend/tsconfig.json backend/tsconfig.build.json /tmp/backend/
+
+COPY shared/ tmp/shared/
+
+WORKDIR /tmp/
 
 RUN corepack enable && \
     corepack install -g pnpm@9.12.2 && \
     pnpm install --frozen-lockfile
 
+WORKDIR /tmp/backend
+
+RUN pnpm install --frozen-lockfile
+
 # compile
 
 ENV NODE_ENV=production
 
-COPY prisma/ /tmp/prisma/
-COPY src/ /tmp/src/
+COPY backend/prisma/ /tmp/backend/prisma/
+COPY backend/src/ /tmp/backend/src/
 
 ARG OOPETRIS_LOBBY_COMMIT_HASH=""
 
@@ -59,10 +66,10 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-COPY --from=build-env /tmp/dist/ /app/
+COPY --from=build-env /tmp/backend/dist/ /app/
 
-COPY --chmod=755 entry.sh /app/
-COPY prisma/ /app/prisma/
+COPY --chmod=755 Dockerfiles/backend_entry.sh /app/entry.sh
+COPY backend/prisma/ /app/prisma/
 
 COPY --from=cpp-buildenv /tmp/simulator/build/bin/server/server /app/gameserver/
 
