@@ -5,6 +5,7 @@ dist/
 node_modules/
 test/
 .git/
+database/
 .dockerignore
 .gitignore
 .env
