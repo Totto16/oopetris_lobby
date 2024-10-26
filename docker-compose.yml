@@ -32,7 +32,7 @@ services:
         - "linux/arm64/v8"
       args:
         # TODO: somehow run "git rev-parse HEAD" here
-        - OOPETRIS_LOBBY_COMMIT_HASH=""
+        - OOPETRIS_LOBBY_COMMIT_HASH=
     restart: unless-stopped
     depends_on:
       - db
