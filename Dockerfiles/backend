@@ -76,6 +76,9 @@ ENV NODE_ENV=production
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm deploy --filter-prod ./backend --no-optional --prod /app
 
+WORKDIR /app
+
+RUN pnpm prisma generate
 
 # final image starts here
 
