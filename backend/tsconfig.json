@@ -19,7 +19,6 @@
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true,
     "strict": true,
-    "strictBuiltinIteratorReturn": true,
     "strictFunctionTypes": true,
     "alwaysStrict": true,
     "strictPropertyInitialization": true,
