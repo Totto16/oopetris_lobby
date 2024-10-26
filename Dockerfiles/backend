@@ -30,23 +30,24 @@ FROM node:20.18.0-alpine AS build-env
 # install node development dependencies
 COPY .npmrc package.json pnpm-lock.yaml pnpm-workspace.yaml /tmp/
 
-COPY backend/.npmrc backend/package.json backend/pnpm-lock.yaml backend/nest-cli.json backend/tsconfig.json backend/tsconfig.build.json /tmp/backend/
+COPY backend/package.json backend/nest-cli.json backend/tsconfig.json backend/tsconfig.build.json /tmp/backend/
 
-COPY shared/ tmp/shared/
+COPY shared/ /tmp/shared/
 
 WORKDIR /tmp/
 
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
 RUN corepack enable && \
-    corepack install -g pnpm@9.12.2 && \
-    pnpm install --frozen-lockfile
+    corepack install -g pnpm@9.12.2 
 
-WORKDIR /tmp/backend
-
-RUN pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 # compile
 
 ENV NODE_ENV=production
+WORKDIR /tmp/backend
 
 COPY backend/prisma/ /tmp/backend/prisma/
 COPY backend/src/ /tmp/backend/src/
@@ -56,6 +57,24 @@ ARG OOPETRIS_LOBBY_COMMIT_HASH=""
 RUN pnpm run generate:types && \
     sed -i "s/XXX_HASH_XXX/${OOPETRIS_LOBBY_COMMIT_HASH:-<Unknown Commit Hash>}/" src/generated/commit.ts && \
     pnpm run build:prod
+
+FROM node:20.18.0-alpine AS prod-dependencies
+
+WORKDIR /tmp/
+
+COPY .  /tmp/
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
+RUN corepack enable && \
+    corepack install -g pnpm@9.12.2 
+
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+
+ENV NODE_ENV=production
+
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm deploy --filter-prod ./backend --no-optional --prod /app
 
 
 # final image starts here
@@ -73,16 +92,7 @@ COPY backend/prisma/ /app/prisma/
 
 COPY --from=cpp-buildenv /tmp/simulator/build/bin/server/server /app/gameserver/
 
-RUN corepack enable && \
-    corepack install -g pnpm@9.12.2 && \ 
-    pnpm install -P --no-lockfile && \
-    rm -rf /tmp/* && \
-    corepack cache clean && \
-    rm -rf /root/.cache/ && \
-    npm uninstall -g yarn pnpm && \
-    rm -rf /root/.npm && \
-    rm -rf /root/.local
-
+COPY --from=prod-dependencies /app/node_modules/ /app/node_modules/
 
 ENV PORT=3000
 ENV CONFIG_PATH=/app/config.json
