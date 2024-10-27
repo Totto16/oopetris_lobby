@@ -1,0 +1,40 @@
+
+FROM node:20.18.0-alpine AS build-env
+
+# install node development dependencies
+COPY .npmrc package.json pnpm-lock.yaml pnpm-workspace.yaml /tmp/
+
+COPY frontend/package.json frontend/angular.json frontend/tsconfig.json frontend/tsconfig.app.json /tmp/frontend/
+
+COPY shared/ /tmp/shared/
+
+WORKDIR /tmp/
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
+RUN corepack enable && \
+    corepack install -g pnpm@9.12.2 
+
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+
+# compile
+
+ENV NODE_ENV=production
+WORKDIR /tmp/frontend
+
+COPY frontend/src/ /tmp/frontend/src/
+
+RUN pnpm run build:prod
+
+# final image starts here
+FROM nginx:1.27.2-alpine
+
+ENV NGINX_BACKEND_PORT=3000
+
+COPY --from=build-env /tmp/frontend/dist/ /usr/share/nginx/html/
+COPY Dockerfiles/nginx/ /etc/nginx/
+
+EXPOSE 80
+
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl http://localhost:80/

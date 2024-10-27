@@ -45,8 +45,33 @@ services:
         aliases:
           - backend
     ports:
-      - 7654:3000
       - 64000-64500:64000-64500
+
+  frontend:
+    container_name: oopetris-lobby-frontend
+    build:
+      context: .
+      dockerfile: Dockerfiles/frontend
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64/v8"
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      - NGINX_BACKEND_HOST=backend
+    networks:
+      main:
+        aliases:
+          - frontend
+    ports:
+      - 7654:80
+
+
+
+
+
+
 
 networks:
   main:

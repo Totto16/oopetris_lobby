@@ -25,3 +25,4 @@ docker-compose.yml
 backend/obpf/simulator/.github/
 backend/obpf/simulator/assets/
 backend/obpf/simulator/build/
+frontend/.angular/
