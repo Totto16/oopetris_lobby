@@ -32,7 +32,7 @@ FROM nginx:1.27.2-alpine
 
 ENV NGINX_BACKEND_PORT=3000
 
-COPY --from=build-env /tmp/frontend/dist/ /usr/share/nginx/html/
+COPY --from=build-env /tmp/frontend/dist/browser/ /usr/share/nginx/html/
 COPY Dockerfiles/nginx/ /etc/nginx/
 
 EXPOSE 80
