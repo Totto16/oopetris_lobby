@@ -50,7 +50,7 @@
     "stylelint-config-standard-scss": "^13.1.0",
     "typescript": "~5.5.2"
   },
-  "packageManager": "pnpm@9.12.2",
+  "packageManager": "pnpm@9.12.3",
   "engines": {
     "node": "20.18.0"
   }
