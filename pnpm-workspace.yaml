@@ -2,3 +2,6 @@ packages:
   - backend
   - frontend
   - shared
+
+onlyBuiltDependencies:
+  - '@nestjs/core'
