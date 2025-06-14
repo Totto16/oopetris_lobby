@@ -28,7 +28,7 @@ COPY frontend/src/ /tmp/frontend/src/
 RUN pnpm run build:prod
 
 # final image starts here
-FROM nginx:1.27.2-alpine
+FROM nginx:1.28.0-alpine
 
 ENV NGINX_BACKEND_PORT=3000
 
