@@ -3,10 +3,12 @@ packages:
   - frontend
   - shared
 
+injectWorkspacePackages: true
+
 onlyBuiltDependencies:
   - '@nestjs/core'
   - '@prisma/client'
   - '@prisma/engines'
-  - 'prisma'
-
-injectWorkspacePackages: true
+  - '@scarf/scarf'
+  - prisma
+  - bcrypt
