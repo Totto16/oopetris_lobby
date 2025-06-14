@@ -6,6 +6,7 @@ import { User } from '@helpers/entities';
     selector: 'oopetris-lobbies-root-app',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent {
     @Input({ required: true }) title!: string;

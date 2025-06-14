@@ -6,6 +6,7 @@ import { State, UserV2Service } from '../../../services/user.service';
     selector: 'lobbies-app-account',
     templateUrl: './account.component.html',
     styleUrls: ['./account.component.scss'],
+    standalone: false
 })
 export class AccountComponent {
     constructor(

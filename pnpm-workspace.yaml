@@ -7,8 +7,11 @@ injectWorkspacePackages: true
 
 onlyBuiltDependencies:
   - '@nestjs/core'
+  - '@parcel/watcher'
   - '@prisma/client'
   - '@prisma/engines'
   - '@scarf/scarf'
-  - prisma
   - bcrypt
+  - esbuild
+  - lmdb
+  - prisma
