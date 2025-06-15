@@ -5,19 +5,21 @@ import { AccountComponent } from './account/component/account.component';
 import { LoginComponent } from './account/login/login.component';
 import { RegisterComponent } from './account/register/register.component';
 import { LobbiesComponent } from './lobbies/component/lobbies.component';
+import { OverviewComponent } from './overview/component/overview.component';
 
 const routes: Routes = [
     {
-        path: '',
+        path: 'account',
         component: AccountComponent,
         children: [
             { path: 'login', component: LoginComponent },
             { path: 'register', component: RegisterComponent },
         ],
     },
+    { path: 'overview', component: OverviewComponent },
     { path: 'lobbies', component: LobbiesComponent, canActivate: [AuthGuard] },
     // otherwise redirect to standard path
-    { path: '**', redirectTo: 'lobbies' },
+    { path: '**', redirectTo: 'overview' },
 ];
 
 @NgModule({
