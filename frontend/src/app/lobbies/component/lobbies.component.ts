@@ -6,6 +6,7 @@ import { UserV2Service } from '../../../services/user.service';
     selector: 'lobbies-component',
     templateUrl: './lobbies.component.html',
     styleUrls: ['./lobbies.component.scss'],
+    standalone: false
 })
 export class LobbiesComponent {
     @Input({ required: true }) title!: string;

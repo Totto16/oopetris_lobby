@@ -3,11 +3,15 @@
     <mat-form-field>
       <mat-label>Username</mat-label>
       <input matInput #username type="text" formControlName="username" placeholder="Enter username" required>
-      <ng-template ngFor let-validator [ngForOf]="validators['username']" ngProjectAs="mat-error">
-        <mat-error *ngIf="validator.hasError.call(this)">
-          {{validator.error}}
-        </mat-error>
-      </ng-template>
+      @for (validator of validators['username']; track validator) {
+        <ng-template let-validator [ngForOf]="validators['username']" ngProjectAs="mat-error">
+          @if (validator.hasError.call(this)) {
+            <mat-error>
+              {{validator.error}}
+            </mat-error>
+          }
+        </ng-template>
+      }
     </mat-form-field>
 
     <mat-form-field>
@@ -18,11 +22,15 @@
         [attr.aria-pressed]="hide">
         <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
       </button>
-      <ng-template ngFor let-validator [ngForOf]="validators['password']" ngProjectAs="mat-error">
-        <mat-error *ngIf="validator.hasError.call(this)">
-          {{validator.error}}
-        </mat-error>
-      </ng-template>
+      @for (validator of validators['password']; track validator) {
+        <ng-template let-validator [ngForOf]="validators['password']" ngProjectAs="mat-error">
+          @if (validator.hasError.call(this)) {
+            <mat-error>
+              {{validator.error}}
+            </mat-error>
+          }
+        </ng-template>
+      }
     </mat-form-field>
 
     <mat-form-field>
@@ -33,11 +41,15 @@
         [attr.aria-pressed]="hide">
         <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
       </button>
-      <ng-template ngFor let-validator [ngForOf]="validators['passwordConfirm']" ngProjectAs="mat-error">
-        <mat-error *ngIf="validator.hasError.call(this)">
-          {{validator.error}}
-        </mat-error>
-      </ng-template>
+      @for (validator of validators['passwordConfirm']; track validator) {
+        <ng-template let-validator [ngForOf]="validators['passwordConfirm']" ngProjectAs="mat-error">
+          @if (validator.hasError.call(this)) {
+            <mat-error>
+              {{validator.error}}
+            </mat-error>
+          }
+        </ng-template>
+      }
     </mat-form-field>
 
     <div class="register-buttons-div">

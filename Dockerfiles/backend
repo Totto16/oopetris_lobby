@@ -27,7 +27,7 @@ RUN cmake -B build -G "Ninja" \
     cmake --build build
 
 
-FROM node:20.18.0-alpine AS build-env
+FROM node:22.16.0-alpine AS build-env
 
 # install node development dependencies
 COPY .npmrc package.json pnpm-lock.yaml pnpm-workspace.yaml /tmp/
@@ -42,7 +42,7 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
 RUN corepack enable && \
-    corepack install -g pnpm@9.12.3 
+    corepack install -g pnpm@10.12.1
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
@@ -60,7 +60,7 @@ RUN pnpm run generate:types && \
     sed -i "s/XXX_HASH_XXX/${OOPETRIS_LOBBY_COMMIT_HASH:-<Unknown Commit Hash>}/" src/generated/commit.ts && \
     pnpm run build:prod
 
-FROM node:20.18.0-alpine AS prod-dependencies
+FROM node:22.16.0-alpine AS prod-dependencies
 
 WORKDIR /tmp/
 
@@ -70,7 +70,7 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
 RUN corepack enable && \
-    corepack install -g pnpm@9.12.3 
+    corepack install -g pnpm@10.12.1
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 
@@ -84,7 +84,10 @@ RUN pnpm prisma generate
 
 # final image starts here
 
-FROM node:20.18.0-alpine
+FROM node:22.16.0-alpine
+
+## needed for prisma
+RUN apk add --no-cache openssl=~3
 
 ENV NODE_ENV=production
 

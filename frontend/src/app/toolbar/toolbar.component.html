@@ -1,42 +1,38 @@
 <mat-toolbar color="primary" class="fixed-toolbar">
-    <mat-toolbar-row>
-        <span>{{ title }}</span>
-        <span class="toolbar-spacer"></span>
-        <div class="toolbar-icon-container toolbar-icon-center">
-            <div
-                *ngIf="user !== null; else login"
-                class="toolbar-icon-container toolbar-icon-center"
+  <mat-toolbar-row>
+    <span>{{ title }}</span>
+    <span class="toolbar-spacer"></span>
+    <div class="toolbar-icon-container toolbar-icon-center">
+      @if (user !== null) {
+        <div
+          class="toolbar-icon-container toolbar-icon-center"
+          >
+          <mat-icon
+            class="toolbar-icon"
+            aria-hidden="false"
+            aria-label="User menu"
+            matTooltip="Logged in as '{{ user.username }}'"
+            [matMenuTriggerFor]="menu"
+            >account_circle</mat-icon
             >
-                <mat-icon
-                    class="toolbar-icon"
-                    aria-hidden="false"
-                    aria-label="User menu"
-                    matTooltip="Logged in as '{{ user.username }}'"
-                    [matMenuTriggerFor]="menu"
-                    >account_circle</mat-icon
-                >
-
-                <mat-menu #menu="matMenu">
-                    <button mat-menu-item (click)="logout()">
-                        <mat-icon>logout</mat-icon>
-                        <span>Logout</span>
-                    </button>
-                </mat-menu>
-            </div>
-
-            <ng-template
-                #login
-                class="toolbar-icon-container toolbar-icon-center"
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="logout()">
+                <mat-icon>logout</mat-icon>
+                <span>Logout</span>
+              </button>
+            </mat-menu>
+          </div>
+        } @else {
+          <mat-icon
+            class="toolbar-icon"
+            aria-hidden="false"
+            aria-label="Login"
+            matTooltip="Login"
+            (click)="redirect('/login')"
+            >login</mat-icon
             >
-                <mat-icon
-                    class="toolbar-icon"
-                    aria-hidden="false"
-                    aria-label="Login"
-                    matTooltip="Login"
-                    (click)="redirect('/login')"
-                    >login</mat-icon
-                >
-            </ng-template>
+          }
+
         </div>
-    </mat-toolbar-row>
-</mat-toolbar>
+      </mat-toolbar-row>
+    </mat-toolbar>

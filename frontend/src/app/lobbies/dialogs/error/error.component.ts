@@ -24,8 +24,7 @@ const intervalTime = 1000 / FPS;
     selector: 'lobbies-app-error-snackbar',
     templateUrl: 'error.component.html',
     styleUrls: ['./error.component.scss'],
-    imports: [MatIconModule, MatProgressBarModule, MatButtonModule, MatTooltipModule],
-    standalone: true,
+    imports: [MatIconModule, MatProgressBarModule, MatButtonModule, MatTooltipModule]
 })
 export class ErrorComponent implements OnDestroy {
     timeoutProgress = 100;

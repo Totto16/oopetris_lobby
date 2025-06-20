@@ -28,6 +28,7 @@ type LoginControl = CustomFormControl<LoginDict>;
     selector: 'lobbies-app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
+    standalone: false
 })
 export class LoginComponent
     extends Shakeable

@@ -26,12 +26,12 @@ model User {
 
 model LobbyPlayer {
   player_id String @unique
-  // if a User gets deleted, the referencing LobbyPlayer gets deletd too, as it serves no purpose, 
+  // if a User gets deleted, the referencing LobbyPlayer gets deleted too, as it serves no purpose, 
   // this may cascade down to the lobby, so that the player may get deleted there from the players array too
   player    User   @relation(fields: [player_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   lobby_id String
-  // if a Lobby gets deleted, the referencing LobbyPlayer gets deletd too, as it serves no purpose
+  // if a Lobby gets deleted, the referencing LobbyPlayer gets deleted too, as it serves no purpose
   lobby    Lobby  @relation(fields: [lobby_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   is_ready Boolean

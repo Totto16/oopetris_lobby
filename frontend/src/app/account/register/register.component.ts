@@ -30,6 +30,7 @@ type SignUpControl = CustomFormControl<SignUpDict>;
     selector: 'lobbies-app-register',
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss'],
+    standalone: false
 })
 export class RegisterComponent
     extends Shakeable

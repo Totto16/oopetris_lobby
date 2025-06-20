@@ -7,6 +7,7 @@ import { UserV2Service } from '../../services/user.service';
     selector: 'lobbies-app-toolbar',
     templateUrl: './toolbar.component.html',
     styleUrls: ['./toolbar.component.scss'],
+    standalone: false
 })
 export class ToolbarComponent {
     @Input({ required: true }) title!: string;

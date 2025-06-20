@@ -2,3 +2,16 @@ packages:
   - backend
   - frontend
   - shared
+
+injectWorkspacePackages: true
+
+onlyBuiltDependencies:
+  - '@nestjs/core'
+  - '@parcel/watcher'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - '@scarf/scarf'
+  - bcrypt
+  - esbuild
+  - lmdb
+  - prisma
