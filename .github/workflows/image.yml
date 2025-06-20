@@ -1,0 +1,35 @@
+name: Image CI
+on:
+    push:
+        branches: ["main"]
+    pull_request:
+    workflow_dispatch:
+
+jobs:
+    image_builder:
+        name: Build Image
+        runs-on: ubuntu-24.04
+        steps:
+            - uses: actions/checkout@v4
+              with: 
+                submodules: recursive
+
+            - name: "Login to GitHub Container Registry"
+              uses: docker/login-action@v3
+              with:
+                  registry: ghcr.io
+                  username: ${{github.actor}}
+                  password: ${{secrets.GITHUB_TOKEN}}
+
+            - name: Build and Push Images
+              run: |
+                  CURRENT_DATE=$(date -u +"%Y%m%d")
+                  docker build -t ghcr.io/totto16/oopetris_lobby/backend:latest . -f ./Dockerfiles/backend --build-arg="OOPETRIS_LOBBY_COMMIT_HASH=$(git rev-parse HEAD)"
+                  docker push ghcr.io/totto16/oopetris_lobby/backend:latest
+                  docker image tag "ghcr.io/totto16/oopetris_lobby/backend:latest" "ghcr.io/totto16/oopetris_lobby/backend:$CURRENT_DATE"
+                  docker push "ghcr.io/totto16/oopetris_lobby/backend:$CURRENT_DATE"
+                  #
+                  docker build -t ghcr.io/totto16/oopetris_lobby/frontend:latest . -f ./Dockerfiles/frontend --build-arg="NGINX_BACKEND_HOST=backend"
+                  docker push ghcr.io/totto16/oopetris_lobby/frontend:latest
+                  docker image tag "ghcr.io/totto16/oopetris_lobby/frontend:latest" "ghcr.io/totto16/oopetris_lobby/frontend:$CURRENT_DATE"
+                  docker push "ghcr.io/totto16/oopetris_lobby/frontend:$CURRENT_DATE"
